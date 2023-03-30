@@ -1,0 +1,56 @@
+plugins {
+    id("java")
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.7.4"
+    id("io.gatling.gradle") version "3.9.2.2"
+    id("com.diffplug.spotless") version "6.17.0"
+}
+
+version = "0.1"
+group = "pl.ing"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("jakarta.annotation:jakarta.annotation-api")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    implementation("io.reactivex.rxjava3:rxjava:3.1.6")
+}
+
+
+application {
+    mainClass.set("pl.ing.Application")
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("pl.ing.*")
+    }
+}
+
+spotless {
+    format 'misc', {
+        target '*.gradle', '*.md', '.gitignore'
+
+        trimTrailingWhitespace()
+        indentWithSpaces(4)
+        endWithNewline()
+        setEncoding('utf-8')
+    }
+
+    java {
+        googleJavaFormat()
+    }
+}

@@ -1,0 +1,7 @@
+micronaut:
+  application:
+    name: pionteching-solution
+netty:
+  default:
+    allocator:
+      max-order: 3
