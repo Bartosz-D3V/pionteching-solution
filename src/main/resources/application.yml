@@ -1,6 +1,8 @@
 micronaut:
   application:
     name: pionteching-solution
+  server:
+    max-request-size: 1000000000
 netty:
   default:
     allocator:

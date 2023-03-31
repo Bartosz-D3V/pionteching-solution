@@ -19,7 +19,7 @@ import pl.ing.atmservice.domain.Task;
 @MicronautTest
 public class AtmServiceTest {
   @Inject
-  @Client("/atms/calculateOrder")
+  @Client("/atms")
   private HttpClient client;
 
   @Test
@@ -34,7 +34,7 @@ public class AtmServiceTest {
     var task8 = new Task(5, RequestType.FAILURE_RESTART, 1);
     var tasks = List.of(task1, task2, task3, task4, task5, task6, task7, task8);
 
-    var request = HttpRequest.POST("/", tasks);
+    var request = HttpRequest.POST("/calculateOrder", tasks);
     var orders =
         client
             .toBlocking()
@@ -87,7 +87,7 @@ public class AtmServiceTest {
     var task10 = new Task(3, RequestType.FAILURE_RESTART, 1);
     var tasks = List.of(task1, task2, task3, task4, task5, task6, task7, task8, task9, task10);
 
-    var request = HttpRequest.POST("/", tasks);
+    var request = HttpRequest.POST("/calculateOrder", tasks);
     var orders =
         client
             .toBlocking()
