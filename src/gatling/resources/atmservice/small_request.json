@@ -1,0 +1,52 @@
+[
+  {
+    "region": 1344,
+    "requestType": "FAILURE_RESTART",
+    "atmId": 1351
+  },
+  {
+    "region": 4118,
+    "requestType": "FAILURE_RESTART",
+    "atmId": 6754
+  },
+  {
+    "region": 6766,
+    "requestType": "SIGNAL_LOW",
+    "atmId": 5496
+  },
+  {
+    "region": 5010,
+    "requestType": "FAILURE_RESTART",
+    "atmId": 2182
+  },
+  {
+    "region": 6115,
+    "requestType": "STANDARD",
+    "atmId": 7381
+  },
+  {
+    "region": 7321,
+    "requestType": "SIGNAL_LOW",
+    "atmId": 8190
+  },
+  {
+    "region": 920,
+    "requestType": "FAILURE_RESTART",
+    "atmId": 4884
+  },
+  {
+    "region": 4942,
+    "requestType": "PRIORITY",
+    "atmId": 5415
+  },
+  {
+    "region": 5961,
+    "requestType": "FAILURE_RESTART",
+    "atmId": 1983
+  },
+  {
+    "region": 7801,
+    "requestType": "FAILURE_RESTART",
+    "atmId": 9632
+  }
+]

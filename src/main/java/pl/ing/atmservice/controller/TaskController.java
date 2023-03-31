@@ -12,7 +12,7 @@ import pl.ing.atmservice.domain.Order;
 import pl.ing.atmservice.domain.Task;
 import pl.ing.atmservice.service.OrderService;
 
-@Controller("/atms/calculateOrder")
+@Controller("/atms")
 public class TaskController {
   private final OrderService orderService;
 
@@ -20,7 +20,7 @@ public class TaskController {
     this.orderService = orderService;
   }
 
-  @Post
+  @Post("/calculateOrder")
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Flowable<Order> calculateOrder(@Body Collection<Task> tasks) {
