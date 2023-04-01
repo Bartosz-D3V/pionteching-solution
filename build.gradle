@@ -42,7 +42,7 @@ micronaut {
 
 spotless {
     format 'misc', {
-        target '*.gradle', '*.md', '.gitignore'
+        target '*.gradle', '*.md', '.gitignore', '*.json', '*.yml', '*.xml', '*.sh'
 
         trimTrailingWhitespace()
         indentWithSpaces(4)
@@ -52,5 +52,6 @@ spotless {
 
     java {
         googleJavaFormat()
+        endWithNewline()
     }
 }

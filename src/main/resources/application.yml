@@ -1,8 +1,16 @@
 micronaut:
   application:
     name: pionteching-solution
+    banner:
+      location: classpath:banner.txt
   server:
-    max-request-size: 1000000000
+    max-request-size: 524288000 # 500MB
+  netty:
+    event-loops:
+      worker:
+        threads:
+          count: 2
+
 netty:
   default:
     allocator:
