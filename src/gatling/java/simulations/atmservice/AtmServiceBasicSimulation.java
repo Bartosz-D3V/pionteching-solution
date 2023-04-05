@@ -13,18 +13,13 @@ import java.time.Duration;
 import simulations.helpers.ScenarioHelper;
 
 public class AtmServiceBasicSimulation extends Simulation {
-  private final HttpProtocolBuilder httpProtocol = ScenarioHelper.getCommonProtocolBuilder("/atms");
+    private final HttpProtocolBuilder httpProtocol = ScenarioHelper.getCommonProtocolBuilder("/atms");
 
-  ScenarioBuilder scn =
-      scenario("BasicSimulationWith10SmallSimRequest")
-          .during(Duration.ofMinutes(5))
-          .on(
-              exec(
-                  http("request_1")
-                      .post("calculateOrder")
-                      .body(RawFileBody("atmservice/small_request.json"))));
+    ScenarioBuilder scn = scenario("BasicSimulationWith10SmallSimRequest")
+            .during(Duration.ofMinutes(5))
+            .on(exec(http("request_1").post("calculateOrder").body(RawFileBody("atmservice/small_request.json"))));
 
-  {
-    setUp(scn.injectOpen(atOnceUsers(10))).protocols(httpProtocol);
-  }
+    {
+        setUp(scn.injectOpen(atOnceUsers(10))).protocols(httpProtocol);
+    }
 }
