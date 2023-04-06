@@ -6,5 +6,5 @@ import pl.ing.atmservice.domain.Order;
 import pl.ing.atmservice.domain.Task;
 
 public interface OrderService {
-  Flowable<Order> calculateOrder(Collection<Task> tasks);
+	Flowable<Order> calculateOrder(Collection<Task> tasks);
 }

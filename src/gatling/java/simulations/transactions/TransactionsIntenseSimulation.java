@@ -14,20 +14,16 @@ import java.time.Duration;
 import simulations.helpers.ScenarioHelper;
 
 public class TransactionsIntenseSimulation extends Simulation {
-  private final HttpProtocolBuilder httpProtocol =
-      ScenarioHelper.getCommonProtocolBuilder("/transactions");
+	private final HttpProtocolBuilder httpProtocol = ScenarioHelper.getCommonProtocolBuilder("/transactions");
 
-  ScenarioBuilder scn =
-      scenario("BasicSimulationWith10BigSimRequest")
-          .during(Duration.ofMinutes(5))
-          .on(
-              exec(
-                  http("request_1")
-                      .post("/report")
-                      .body(RawFileBody("transactions/big_request.json"))
-                      .check(jsonPath("$[*].balance").ofInt().is(0))));
-
-  {
-    setUp(scn.injectOpen(atOnceUsers(10))).protocols(httpProtocol);
-  }
+	ScenarioBuilder scn = scenario("BasicSimulationWith10BigSimRequest")
+			.during(Duration.ofMinutes(5))
+			.on(exec(http("request_1")
+					.post("/report")
+					.body(RawFileBody("transactions/big_request.json"))
+					// All transactions sum to 0 to ease testing
+					.check(jsonPath("$[*].balance").ofInt().is(0))));
+	{
+		setUp(scn.injectOpen(atOnceUsers(10))).protocols(httpProtocol);
+	}
 }

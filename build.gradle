@@ -19,6 +19,8 @@ dependencies {
     implementation("jakarta.annotation:jakarta.annotation-api")
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation("io.reactivex.rxjava3:rxjava:3.1.6")
+
+    implementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'
 }
 
 
@@ -51,7 +53,6 @@ spotless {
     }
 
     java {
-        googleJavaFormat()
         endWithNewline()
     }
 }
