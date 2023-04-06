@@ -14,16 +14,16 @@ import pl.ing.atmservice.service.OrderService;
 
 @Controller("/atms")
 public class TaskController {
-    private final OrderService orderService;
+	private final OrderService orderService;
 
-    public TaskController(OrderService orderService) {
-        this.orderService = orderService;
-    }
+	public TaskController(OrderService orderService) {
+		this.orderService = orderService;
+	}
 
-    @Post("/calculateOrder")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Flowable<Order> calculateOrder(@Body Collection<Task> tasks) {
-        return orderService.calculateOrder(tasks);
-    }
+	@Post("/calculateOrder")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Flowable<Order> calculateOrder(@Body Collection<Task> tasks) {
+		return orderService.calculateOrder(tasks);
+	}
 }

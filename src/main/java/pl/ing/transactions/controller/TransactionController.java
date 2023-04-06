@@ -14,16 +14,16 @@ import pl.ing.transactions.service.TransactionService;
 
 @Controller("/transactions")
 public class TransactionController {
-    private final TransactionService transactionService;
+	private final TransactionService transactionService;
 
-    public TransactionController(TransactionService transactionService) {
-        this.transactionService = transactionService;
-    }
+	public TransactionController(TransactionService transactionService) {
+		this.transactionService = transactionService;
+	}
 
-    @Post("/report")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Flowable<Account> processTransactions(@Body Collection<Transaction> transactions) {
-        return transactionService.processTransactions(transactions);
-    }
+	@Post("/report")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Flowable<Account> processTransactions(@Body Collection<Transaction> transactions) {
+		return transactionService.processTransactions(transactions);
+	}
 }
