@@ -5,8 +5,8 @@ import java.util.UUID;
 
 public class ClanVisitor implements Comparable<ClanVisitor> {
     private final Clan clan;
-    private boolean visited;
     private final UUID id;
+    private boolean visited;
 
     public ClanVisitor(Clan clan) {
         this.clan = clan;
@@ -22,8 +22,12 @@ public class ClanVisitor implements Comparable<ClanVisitor> {
         return visited;
     }
 
-    public void setVisited(boolean visited) {
-        this.visited = visited;
+    public void markVisited() {
+        this.visited = true;
+    }
+
+    public int getNumberOfPlayers() {
+        return clan.numberOfPlayers();
     }
 
     @Override
@@ -33,18 +37,5 @@ public class ClanVisitor implements Comparable<ClanVisitor> {
             return id.compareTo(clanVisitor.id);
         }
         return clanCompare;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ClanVisitor that = (ClanVisitor) o;
-        return id.equals(((ClanVisitor) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(clan, visited, id);
     }
 }

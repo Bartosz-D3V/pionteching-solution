@@ -12,5 +12,6 @@ import pl.ing.onlinegame.domain.Clan;
 import pl.ing.onlinegame.domain.Players;
 
 public interface OnlineGameService {
-    ArrayList<ArrayList<Clan>> calculateGroupsTest(Players players);
+    ArrayList<ArrayList<Clan>> calculateGroups(Players players);
+    Flowable<ArrayList<Clan>> calculateGroupsAsync(Players players);
 }

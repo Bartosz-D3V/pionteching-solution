@@ -1,5 +1,6 @@
 package pl.ing.onlinegame.service;
 
+import io.reactivex.rxjava3.core.Flowable;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -21,6 +22,24 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class OnlineGameServiceTest {
     private final OnlineGameService onlineGameService = new OnlineGameServiceImpl();
+
+    @ParameterizedTest
+    @MethodSource("generateData")
+    void calculateGroupsShouldFilterOurClansByPlayersCount(int maxPlayers, List<Clan> clans, List<List<Clan>> expected) {
+        final ArrayList<ArrayList<Clan>> result = onlineGameService.calculateGroups(new Players(maxPlayers, clans));
+        onlineGameService.calculateGroups(new Players(maxPlayers, clans));
+        assertNotNull(result);
+        assertEquals(expected, result);
+    }
+
+    @ParameterizedTest
+    @MethodSource("generateData")
+    void testAsync(int maxPlayers, List<Clan> clans, List<List<Clan>> expected) {
+        var result = onlineGameService.calculateGroupsAsync(new Players(maxPlayers, clans)).toList().blockingGet();
+//        onlineGameService.calculateGroupsAsync(new Players(maxPlayers, clans)).toList().blockingGet();
+        assertNotNull(result);
+        assertEquals(expected, result);
+    }
 
     static Stream<Arguments> generateData() {
         return Stream.of(
@@ -298,149 +317,5 @@ class OnlineGameServiceTest {
                         )
                 )
         );
-    }
-
-    @ParameterizedTest
-    @MethodSource("generateData")
-    void calculateGroupsShouldFilterOurClansByPlayersCount(int maxPlayers, List<Clan> clans, List<List<Clan>> expected) {
-        final ArrayList<ArrayList<Clan>> result = onlineGameService.calculateGroupsTest(new Players(maxPlayers, clans));
-
-        assertNotNull(result);
-        assertEquals(expected, result);
-    }
-
-//    @Test
-//    void calculateGroupsShouldFilterOurClansByPlayersCountUsingPlayerCountAsSecondComparator() {
-//        final var MAX_PLAYERS = 6;
-//        var clans = Arrays.asList(new Clan(2, 100), new Clan(5, 90), new Clan(3, 20), new Clan(2, 20));
-//        var players = new Players(MAX_PLAYERS, clans);
-//
-//        var result = onlineGameService.calculateGroups(players).toList().blockingGet();
-//        assertNotNull(result);
-//        assertEquals(3, result.size());
-//    }
-
-    @Test
-    void test() {
-        var clans = Arrays.asList(
-                new Clan(4, 50),
-                new Clan(2, 70),
-                new Clan(6, 60),
-                new Clan(1, 15),
-                new Clan(5, 40),
-                new Clan(3, 45),
-                new Clan(1, 12),
-                new Clan(4, 40)
-        );
-        var players = new Players(6, clans);
-        var subject = new OnlineGameServiceImpl();
-        var result = subject.calculateGroupsTest(players);
-        assert (result != null);
-    }
-
-    @Test
-    void test3() {
-        var clans = Arrays.asList(
-                new Clan(1, 40),
-                new Clan(1, 40),
-                new Clan(3, 80),
-                new Clan(5, 5),
-                new Clan(4, 40),
-                new Clan(10, 100)
-        );
-        var players = new Players(20, clans);
-        var subject = new OnlineGameServiceImpl();
-        var result = subject.calculateGroupsTest(players);
-        assert (result != null);
-    }
-
-    @Test
-    void test4() {
-        var clans = Arrays.asList(
-                new Clan(8, 40),
-                new Clan(1, 12),
-                new Clan(1, 30),
-                new Clan(2, 20),
-                new Clan(5, 400),
-                new Clan(3, 15)
-        );
-        var players = new Players(3, clans);
-        var subject = new OnlineGameServiceImpl();
-        var result = subject.calculateGroupsTest(players);
-        assert (result != null);
-    }
-
-    @Test
-    void findWeakerClanTest1() {
-        var subject = new OnlineGameServiceImpl();
-
-        var tree = new TreeMap<Integer, PriorityQueue<Clan>>((integer, t1) -> -1 * Integer.compare(integer, t1));
-        var queue1 = new PriorityQueue<Clan>();
-        queue1.add(new Clan(4, 50));
-        queue1.add(new Clan(4, 40));
-        tree.put(4, queue1);
-
-        var queue2 = new PriorityQueue<Clan>();
-        queue2.add(new Clan(3, 20));
-        queue2.add(new Clan(3, 10));
-        tree.put(3, queue2);
-
-        var queue3 = new PriorityQueue<Clan>();
-        queue3.add(new Clan(1, 20));
-        queue3.add(new Clan(1, 10));
-        tree.put(1, queue3);
-
-        var weakerClan = subject.findWeakerClan(5, tree);
-        assertEquals(4, weakerClan.numberOfPlayers());
-        assertEquals(50, weakerClan.points());
-    }
-
-    @Test
-    void findWeakerClanTest2() {
-        var subject = new OnlineGameServiceImpl();
-
-        var tree = new TreeMap<Integer, PriorityQueue<Clan>>((integer, t1) -> -1 * Integer.compare(integer, t1));
-        var queue1 = new PriorityQueue<Clan>();
-        queue1.add(new Clan(4, 50));
-        queue1.add(new Clan(4, 40));
-        tree.put(4, queue1);
-
-        var queue2 = new PriorityQueue<Clan>();
-        queue2.add(new Clan(3, 20));
-        queue2.add(new Clan(3, 10));
-        tree.put(3, queue2);
-
-        var queue3 = new PriorityQueue<Clan>();
-        queue3.add(new Clan(1, 20));
-        queue3.add(new Clan(1, 10));
-        tree.put(1, queue3);
-
-        var weakerClan = subject.findWeakerClan(2, tree);
-        assertEquals(1, weakerClan.numberOfPlayers());
-        assertEquals(20, weakerClan.points());
-    }
-
-    @Test
-    void test2() {
-//        var a = new ConcurrentSkipListSet<String>();
-//        a.add("1");
-//        a.add("2");
-//        a.add("3");
-//        for (String s : a.descendingSet()){
-//            System.out.println();
-//            a.remove("3");
-//        }
-//        var a = new ConcurrentLinkedQueue<String>();
-        var a = new PriorityBlockingQueue<String>();
-        a.add("1");
-        a.add("2");
-        a.add("3");
-        a.add("3");
-        String s = null;
-        for (Object element : a) {
-            // Do something with the element
-            System.out.println(element.toString());
-            a.remove("3");
-        }
     }
 }
