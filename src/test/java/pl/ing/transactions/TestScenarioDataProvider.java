@@ -52,11 +52,11 @@ public class TestScenarioDataProvider {
                                 ),
                                 // THEN expect report:
                                 Arrays.asList(
-                                        new Account("06105023389842834748547303", 1 ,1, bigDecimalOf(-90.09)),
                                         new Account("31074318698137062235845814", 2, 0, bigDecimalOf(-301.89)),
+                                        new Account("06105023389842834748547303", 1 ,1, bigDecimalOf(-90.09)),
                                         new Account("32309111922661937852684864", 1, 1, bigDecimalOf(39.20)),
-                                        new Account("66105036543749403346524547", 1, 2, bigDecimalOf(251.79)),
-                                        new Account("99105023389842834748547321", 0, 1, bigDecimalOf(100.99))
+                                        new Account("99105023389842834748547321", 0, 1, bigDecimalOf(100.99)),
+                                        new Account("66105036543749403346524547", 1, 2, bigDecimalOf(251.79))
                                 )
                         ),
                         // Scenario IV
@@ -65,6 +65,32 @@ public class TestScenarioDataProvider {
                                 Collections.emptyList(),
                                 // THEN expect report:
                                 Collections.emptyList()
+                        ),
+                        // Scenario V
+                        Arguments.of(
+                                // GIVEN transactions:
+                                List.of(
+                                        new Transaction("account-1", "account-1", bigDecimalOf(100))
+                                ),
+                                // THEN expect report:
+                                List.of(
+                                        new Account("account-1", 0, 0, bigDecimalOf(0))
+                                )
+                        ),
+                        // Scenario V
+                        Arguments.of(
+                                // GIVEN transactions:
+                                List.of(
+                                        new Transaction("account-1", "account-1", bigDecimalOf(100)),
+                                        new Transaction("account-1", "account-1", bigDecimalOf(-100)),
+                                        new Transaction("account-2", "account-2", bigDecimalOf(0)),
+                                        new Transaction("account-2", "account-2", bigDecimalOf(500))
+                                ),
+                                // THEN expect report:
+                                List.of(
+                                        new Account("account-1", 0, 0, bigDecimalOf(0)),
+                                        new Account("account-2", 0, 0, bigDecimalOf(0))
+                                )
                         )
                 );
         }
