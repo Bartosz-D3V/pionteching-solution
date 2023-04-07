@@ -26,12 +26,15 @@ class OnlineGameControllerTest {
 
     @ParameterizedTest
     @MethodSource("pl.ing.onlinegame.TestScenarioDataProvider#generateData")
-    void calculateGroupsListOfClanGroups(int maxPlayers, Collection<Clan> clans, Collection<Collection<Clan>> expected) {
+    void calculateGroupsListOfClanGroups(
+            int maxPlayers, Collection<Clan> clans, Collection<Collection<Clan>> expected) {
         var players = new Players(maxPlayers, clans);
 
         var request = HttpRequest.POST("/calculate", players);
-        var response = client.toBlocking().exchange(request.contentType(MediaType.APPLICATION_JSON_TYPE),
-                Argument.listOf(Argument.listOf(Clan.class)));
+        var response = client.toBlocking()
+                .exchange(
+                        request.contentType(MediaType.APPLICATION_JSON_TYPE),
+                        Argument.listOf(Argument.listOf(Clan.class)));
 
         assertEquals(HttpStatus.OK, response.getStatus());
         assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().get(HttpHeaders.CONTENT_TYPE));

@@ -22,6 +22,7 @@ public class TransactionsBasicSimulation extends Simulation {
                     .post("/report")
                     .body(RawFileBody("transactions/small_request.json"))
                     .check(jsonPath("$[*].balance").ofInt().is(0))));
+
     {
         setUp(scn.injectOpen(atOnceUsers(10))).protocols(httpProtocol);
     }

@@ -14,8 +14,8 @@ class OnlineGameServiceTest {
 
     @ParameterizedTest
     @MethodSource("pl.ing.onlinegame.TestScenarioDataProvider#generateData")
-    void calculateGroupsShouldFilterOurClansByPlayersCount(int maxPlayers, Collection<Clan> clans,
-            Collection<Collection<Clan>> expected) {
+    void calculateGroupsShouldFilterOurClansByPlayersCount(
+            int maxPlayers, Collection<Clan> clans, Collection<Collection<Clan>> expected) {
         final Collection<Collection<Clan>> result = onlineGameService.calculateGroups(new Players(maxPlayers, clans));
 
         assertNotNull(result);

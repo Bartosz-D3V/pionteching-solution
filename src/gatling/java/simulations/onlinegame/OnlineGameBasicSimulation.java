@@ -17,9 +17,8 @@ public class OnlineGameBasicSimulation extends Simulation {
 
     ScenarioBuilder scn = scenario("BasicSimulationWith10SmallSimRequest")
             .during(Duration.ofMinutes(5))
-            .on(exec(http("request_1")
-                    .post("/calculate")
-                    .body(RawFileBody("onlinegame/small_request.json"))));
+            .on(exec(http("request_1").post("/calculate").body(RawFileBody("onlinegame/small_request.json"))));
+
     {
         setUp(scn.injectOpen(atOnceUsers(10))).protocols(httpProtocol);
     }

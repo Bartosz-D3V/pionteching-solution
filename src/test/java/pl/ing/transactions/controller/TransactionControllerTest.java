@@ -12,12 +12,7 @@ import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
-import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.stream.Collectors;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import pl.ing.transactions.domain.Account;
@@ -31,10 +26,11 @@ class TransactionControllerTest {
 
     @ParameterizedTest
     @MethodSource("pl.ing.transactions.TestScenarioDataProvider#generateData")
-    void processTransactionsShouldReturnListOfAccounts(Collection<Transaction> transactions, Collection<Account> expected) {
+    void processTransactionsShouldReturnListOfAccounts(
+            Collection<Transaction> transactions, Collection<Account> expected) {
         var request = HttpRequest.POST("/report", transactions);
-        var response = client.toBlocking().exchange(request.contentType(MediaType.APPLICATION_JSON_TYPE),
-                Argument.listOf(Account.class));
+        var response = client.toBlocking()
+                .exchange(request.contentType(MediaType.APPLICATION_JSON_TYPE), Argument.listOf(Account.class));
 
         assertEquals(HttpStatus.OK, response.getStatus());
         assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().get(HttpHeaders.CONTENT_TYPE));

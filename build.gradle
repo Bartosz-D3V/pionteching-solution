@@ -54,5 +54,7 @@ spotless {
 
     java {
         endWithNewline()
+        palantirJavaFormat()
+        targetExclude("**/TestScenarioDataProvider.java")
     }
 }

@@ -12,7 +12,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Flowable<Order> calculateOrder(Collection<Task> tasks) {
-        return Flowable.fromIterable(tasks).sorted(Comparator.comparing(Task::region).thenComparing(Task::requestType))
-                .map(task -> new Order(task.region(), task.atmId())).distinct();
+        return Flowable.fromIterable(tasks)
+                .sorted(Comparator.comparing(Task::region).thenComparing(Task::requestType))
+                .map(task -> new Order(task.region(), task.atmId()))
+                .distinct();
     }
 }

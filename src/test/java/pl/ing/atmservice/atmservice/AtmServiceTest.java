@@ -12,14 +12,10 @@ import io.micronaut.http.client.HttpClient;
 import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
-
 import java.util.Collection;
-import java.util.List;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import pl.ing.atmservice.domain.Order;
-import pl.ing.atmservice.domain.RequestType;
 import pl.ing.atmservice.domain.Task;
 
 @MicronautTest
@@ -32,8 +28,8 @@ public class AtmServiceTest {
     @MethodSource("pl.ing.atmservice.TestScenarioDataProvider#generateData")
     public void atmServiceEndpointDuplicateTest(Collection<Task> tasks, Collection<Order> expected) {
         var request = HttpRequest.POST("/calculateOrder", tasks);
-        var response = client.toBlocking().exchange(request.contentType(MediaType.APPLICATION_JSON_TYPE),
-                Argument.listOf(Order.class));
+        var response = client.toBlocking()
+                .exchange(request.contentType(MediaType.APPLICATION_JSON_TYPE), Argument.listOf(Order.class));
 
         assertEquals(HttpStatus.OK, response.getStatus());
         assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().get(HttpHeaders.CONTENT_TYPE));

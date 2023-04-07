@@ -17,17 +17,15 @@ import pl.ing.onlinegame.domain.Players;
 public class OnlineGameServiceImpl implements OnlineGameService {
     @Override
     public Collection<Collection<Clan>> calculateGroups(Players players) {
-        if (players == null || players.clans() == null || players.clans().isEmpty())
-            return new ArrayList<>();
         var result = new ArrayList<Collection<Clan>>();
+        if (players.clans() == null || players.clans().isEmpty()) return result;
 
         var maxGroupSize = players.groupCount();
         var clansTreeMap = new TreeMap<Integer, PriorityQueue<ClanVisitor>>(Comparator.reverseOrder());
         var clansTreeSet = new TreeSet<ClanVisitor>();
         for (Clan clan : players.clans()) {
             ClanVisitor clanVisitor = new ClanVisitor(clan);
-            if (clanVisitor.getNumberOfPlayers() > maxGroupSize)
-                continue;
+            if (clanVisitor.getNumberOfPlayers() > maxGroupSize) continue;
             clansTreeSet.add(clanVisitor);
             clansTreeMap.compute(clan.numberOfPlayers(), (key, value) -> {
                 if (value == null) {
@@ -45,8 +43,7 @@ public class OnlineGameServiceImpl implements OnlineGameService {
         var tempGroupSize = 0;
         var skippedClans = new Stack<ClanVisitor>();
         for (ClanVisitor clanVisitor : clansTreeSet) {
-            if (clanVisitor.isVisited())
-                continue;
+            if (clanVisitor.isVisited()) continue;
 
             while (!skippedClans.isEmpty() && clanFitsIn(skippedClans.peek(), tempGroupSize, maxGroupSize)) {
                 ClanVisitor anotherClanVisitor = skippedClans.pop();
@@ -88,8 +85,9 @@ public class OnlineGameServiceImpl implements OnlineGameService {
         return result;
     }
 
-    public ClanVisitor findWeakerClanVisitor(int freeSpace, TreeMap<Integer, PriorityQueue<ClanVisitor>> treeMap) {
-        for (Map.Entry<Integer, PriorityQueue<ClanVisitor>> weakerClans : treeMap.tailMap(freeSpace, true).entrySet()) {
+    private ClanVisitor findWeakerClanVisitor(int freeSpace, TreeMap<Integer, PriorityQueue<ClanVisitor>> treeMap) {
+        for (Map.Entry<Integer, PriorityQueue<ClanVisitor>> weakerClans :
+                treeMap.tailMap(freeSpace, true).entrySet()) {
             var weakerClansQueue = weakerClans.getValue();
             var weakerClanVisitor = weakerClansQueue.peek();
             if (weakerClanVisitor != null && freeSpace >= weakerClanVisitor.getNumberOfPlayers()) {
@@ -103,8 +101,8 @@ public class OnlineGameServiceImpl implements OnlineGameService {
         return clanVisitor.getNumberOfPlayers() + groupSize <= maxGroupSize;
     }
 
-    private Collection<Collection<Clan>> getOrphanClans(int maxGroupSize, ArrayList<Clan> tempGroup,
-            Stack<ClanVisitor> skippedClans) {
+    private Collection<Collection<Clan>> getOrphanClans(
+            int maxGroupSize, ArrayList<Clan> tempGroup, Stack<ClanVisitor> skippedClans) {
         var result = new ArrayList<Collection<Clan>>();
 
         var lastTempGroup = new ArrayList<Clan>();

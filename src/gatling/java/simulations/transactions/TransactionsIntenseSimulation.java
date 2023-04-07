@@ -23,6 +23,7 @@ public class TransactionsIntenseSimulation extends Simulation {
                     .body(RawFileBody("transactions/big_request.json"))
                     // All transactions sum to 0 to ease testing
                     .check(jsonPath("$[*].balance").ofInt().is(0))));
+
     {
         setUp(scn.injectOpen(atOnceUsers(10))).protocols(httpProtocol);
     }
