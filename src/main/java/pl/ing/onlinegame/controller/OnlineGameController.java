@@ -13,16 +13,16 @@ import pl.ing.onlinegame.service.OnlineGameService;
 
 @Controller("/onlinegame")
 public class OnlineGameController {
-	private final OnlineGameService onlineGameService;
+    private final OnlineGameService onlineGameService;
 
-	public OnlineGameController(OnlineGameService onlineGameService) {
-		this.onlineGameService = onlineGameService;
-	}
+    public OnlineGameController(OnlineGameService onlineGameService) {
+        this.onlineGameService = onlineGameService;
+    }
 
-	@Post("/calculate")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Collection<Clan>> calculateGroups(@Body Players players) {
-		return onlineGameService.calculateGroups(players);
-	}
+    @Post("/calculate")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Collection<Collection<Clan>> calculateGroups(@Body Players players) {
+        return onlineGameService.calculateGroups(players);
+    }
 }

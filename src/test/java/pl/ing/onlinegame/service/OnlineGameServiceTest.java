@@ -10,15 +10,15 @@ import pl.ing.onlinegame.domain.Clan;
 import pl.ing.onlinegame.domain.Players;
 
 class OnlineGameServiceTest {
-	private final OnlineGameService onlineGameService = new OnlineGameServiceImpl();
+    private final OnlineGameService onlineGameService = new OnlineGameServiceImpl();
 
-	@ParameterizedTest
-	@MethodSource("pl.ing.onlinegame.TestScenarioDataProvider#generateData")
-	void calculateGroupsShouldFilterOurClansByPlayersCount(int maxPlayers, Collection<Clan> clans,
-			Collection<Collection<Clan>> expected) {
-		final Collection<Collection<Clan>> result = onlineGameService.calculateGroups(new Players(maxPlayers, clans));
+    @ParameterizedTest
+    @MethodSource("pl.ing.onlinegame.TestScenarioDataProvider#generateData")
+    void calculateGroupsShouldFilterOurClansByPlayersCount(
+            int maxPlayers, Collection<Clan> clans, Collection<Collection<Clan>> expected) {
+        final Collection<Collection<Clan>> result = onlineGameService.calculateGroups(new Players(maxPlayers, clans));
 
-		assertNotNull(result);
-		assertEquals(expected, result);
-	}
+        assertNotNull(result);
+        assertEquals(expected, result);
+    }
 }
