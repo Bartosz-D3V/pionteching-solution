@@ -13,14 +13,14 @@ import java.time.Duration;
 import simulations.helpers.ScenarioHelper;
 
 public class OnlineGameIntenseSimulation extends Simulation {
-	private final HttpProtocolBuilder httpProtocol = ScenarioHelper.getCommonProtocolBuilder("/onlinegame");
+    private final HttpProtocolBuilder httpProtocol = ScenarioHelper.getCommonProtocolBuilder("/onlinegame");
 
-	ScenarioBuilder scn = scenario("BasicSimulationWith10SmallSimRequest")
-			.during(Duration.ofMinutes(5))
-			.on(exec(http("request_1")
-					.post("/calculate")
-					.body(RawFileBody("onlinegame/big_request.json"))));
-	{
-		setUp(scn.injectOpen(atOnceUsers(10))).protocols(httpProtocol);
-	}
+    ScenarioBuilder scn = scenario("BasicSimulationWith10SmallSimRequest")
+            .during(Duration.ofMinutes(5))
+            .on(exec(http("request_1")
+                    .post("/calculate")
+                    .body(RawFileBody("onlinegame/big_request.json"))));
+    {
+        setUp(scn.injectOpen(atOnceUsers(10))).protocols(httpProtocol);
+    }
 }
