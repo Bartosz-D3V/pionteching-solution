@@ -32,4 +32,7 @@ jobs:
       # Run the "semgrep ci" command on the command line of the docker image.
       - run: semgrep ci
         env:
-            SEMGREP_RULES: p/default, p/cwe-top-25 # more at semgrep.dev/explore
+            SEMGREP_RULES: p/default
+      - run: semgrep ci
+        env:
+            SEMGREP_RULES: p/cwe-top-25 # more at semgrep.dev/explore
