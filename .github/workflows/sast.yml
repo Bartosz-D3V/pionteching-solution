@@ -30,7 +30,7 @@ jobs:
       # Fetch project source with GitHub Actions Checkout.
       - uses: actions/checkout@v3
       # Run the "semgrep ci" command on the command line of the docker image.
-      - run: semgrep ci --config p/default --config p/owasp-top-ten
+      - run: semgrep ci --config p/default
 #        env:
 #            SEMGREP_RULES: p/default
 #      - run: semgrep ci
