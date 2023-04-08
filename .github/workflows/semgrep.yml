@@ -20,4 +20,4 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - run: semgrep ci --config p/java --config p/default --config p/owasp-top-ten --config p/owasp-top-ten --config/r2c-security-audit
+      - run: semgrep ci --config p/java --config p/default --config p/owasp-top-ten --config p/owasp-top-ten --config p/r2c-security-audit
