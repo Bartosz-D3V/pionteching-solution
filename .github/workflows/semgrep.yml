@@ -1,0 +1,23 @@
+name: SAST[Semgrep]
+
+on:
+  pull_request: { }
+  push:
+    branches: [ "master" ]
+  schedule:
+    - cron: '00 17 * * *' # Sets Semgrep to scan every day at 17:00 UTC.
+
+jobs:
+  semgrep:
+    name: Scan
+    runs-on: ubuntu-latest
+
+    container:
+      image: returntocorp/semgrep
+
+    # Skip any PR created by dependabot to avoid permission issues:
+    if: (github.actor != 'dependabot[bot]')
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: semgrep ci --config p/java --config p/default --config p/owasp-top-ten --config p/owasp-top-ten --config/r2c-security-audit
