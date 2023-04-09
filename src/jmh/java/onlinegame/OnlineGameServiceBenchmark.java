@@ -29,7 +29,7 @@ public class OnlineGameServiceBenchmark {
         public void setup() {
             Collection<Clan> clans = new ArrayList<>(NUMBER_OF_CLANS);
             var rand = new Random();
-            for (int i = 0; i < NUMBER_OF_CLANS; i++) {
+            for (int i = 0; i < NUMBER_OF_CLANS - 1; i++) {
                 clans.add(new Clan(rand.nextInt(1000) + 1, rand.nextInt(1000) + 1));
             }
             players = new Players(rand.nextInt(100) + 1, clans);

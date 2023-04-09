@@ -29,7 +29,7 @@ public class OrderServiceBenchmark {
         @Setup(Level.Trial)
         public void setup() {
             var rand = new SecureRandom();
-            for (int i = 0; i < NUMBER_OF_TASKS; i++) {
+            for (int i = 0; i < NUMBER_OF_TASKS - 1; i++) {
                 tasks.add(new Task(rand.nextInt(1000) + 1, randomRequestType(rand), rand.nextInt(1000) + 1));
             }
         }
@@ -42,7 +42,7 @@ public class OrderServiceBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void calculateGroupsBench(MyState state) {
+    public void calculateOrderBench(MyState state) {
         state.orderService.calculateOrder(state.tasks).toList().blockingGet();
     }
 }

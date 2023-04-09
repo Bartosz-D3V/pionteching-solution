@@ -27,7 +27,7 @@ public class TransactionServiceBenchmark {
 
         @Setup(Level.Trial)
         public void setup() {
-            for (int i = 0; i < NUMBER_OF_TRANSACTIONS; i++) {
+            for (int i = 0; i < NUMBER_OF_TRANSACTIONS - 1; i++) {
                 transactions.add(new Transaction("account-1", "account-2", BigDecimal.valueOf(getRandomDouble())));
             }
         }
