@@ -12,6 +12,7 @@ import java.util.TreeSet;
 import pl.ing.onlinegame.domain.Clan;
 import pl.ing.onlinegame.domain.ClanVisitor;
 import pl.ing.onlinegame.domain.Players;
+import pl.ing.util.Pair;
 
 @Singleton
 public class OnlineGameServiceImpl implements OnlineGameService {
@@ -21,23 +22,9 @@ public class OnlineGameServiceImpl implements OnlineGameService {
         if (players.clans() == null || players.clans().isEmpty()) return result;
 
         var maxGroupSize = players.groupCount();
-        var clansTreeMap = new TreeMap<Integer, PriorityQueue<ClanVisitor>>(Comparator.reverseOrder());
-        var clansTreeSet = new TreeSet<ClanVisitor>();
-        for (Clan clan : players.clans()) {
-            ClanVisitor clanVisitor = new ClanVisitor(clan);
-            if (clanVisitor.getNumberOfPlayers() > maxGroupSize) continue;
-            clansTreeSet.add(clanVisitor);
-            clansTreeMap.compute(clan.numberOfPlayers(), (key, value) -> {
-                if (value == null) {
-                    var pq = new PriorityQueue<ClanVisitor>();
-                    pq.add(clanVisitor);
-                    return pq;
-                } else {
-                    value.add(clanVisitor);
-                    return value;
-                }
-            });
-        }
+        var groupedClans = groupClans(players);
+        var clansTreeMap = groupedClans.first();
+        var clansTreeSet = groupedClans.second();
 
         var tempGroup = new ArrayList<Clan>();
         var tempGroupSize = 0;
@@ -47,8 +34,8 @@ public class OnlineGameServiceImpl implements OnlineGameService {
 
             while (!skippedClans.isEmpty() && clanFitsIn(skippedClans.peek(), tempGroupSize, maxGroupSize)) {
                 ClanVisitor anotherClanVisitor = skippedClans.pop();
-                tempGroupSize += anotherClanVisitor.getNumberOfPlayers();
                 tempGroup.add(anotherClanVisitor.getClan());
+                tempGroupSize += anotherClanVisitor.getNumberOfPlayers();
                 anotherClanVisitor.markVisited();
             }
 
@@ -73,7 +60,7 @@ public class OnlineGameServiceImpl implements OnlineGameService {
                     weakerClanVisitor = findWeakerClanVisitor(maxGroupSize - tempGroupSize, clansTreeMap);
                 }
 
-                if (!tempGroup.isEmpty()) {
+                if (tempGroupSize != 0) {
                     result.add(tempGroup);
                     tempGroup = new ArrayList<>();
                     tempGroupSize = 0;
@@ -85,16 +72,45 @@ public class OnlineGameServiceImpl implements OnlineGameService {
         return result;
     }
 
+    private Pair<TreeMap<Integer, PriorityQueue<ClanVisitor>>, TreeSet<ClanVisitor>> groupClans(Players players) {
+        var clansTreeMap = new TreeMap<Integer, PriorityQueue<ClanVisitor>>(Comparator.reverseOrder());
+        var clansTreeSet = new TreeSet<ClanVisitor>();
+        for (Clan clan : players.clans()) {
+            ClanVisitor clanVisitor = new ClanVisitor(clan);
+            if (clanVisitor.getNumberOfPlayers() > players.groupCount()) continue;
+            clansTreeSet.add(clanVisitor);
+            clansTreeMap.compute(clan.numberOfPlayers(), (key, value) -> {
+                if (value == null) {
+                    var pq = new PriorityQueue<ClanVisitor>();
+                    pq.add(clanVisitor);
+                    return pq;
+                } else {
+                    value.add(clanVisitor);
+                    return value;
+                }
+            });
+        }
+        return new Pair<>(clansTreeMap, clansTreeSet);
+    }
+
     private ClanVisitor findWeakerClanVisitor(int freeSpace, TreeMap<Integer, PriorityQueue<ClanVisitor>> treeMap) {
+        var maxPoints = 0;
+        Integer key = null;
         for (Map.Entry<Integer, PriorityQueue<ClanVisitor>> weakerClans :
                 treeMap.tailMap(freeSpace, true).entrySet()) {
             var weakerClansQueue = weakerClans.getValue();
             var weakerClanVisitor = weakerClansQueue.peek();
-            if (weakerClanVisitor != null && freeSpace >= weakerClanVisitor.getNumberOfPlayers()) {
-                return weakerClansQueue.poll();
+
+            if (weakerClanVisitor != null) {
+                int numberOfPlayersInWeakerClan = weakerClanVisitor.getNumberOfPlayers();
+                int pointsInWeakerClan = weakerClanVisitor.getClan().points();
+                if (freeSpace >= numberOfPlayersInWeakerClan && pointsInWeakerClan >= maxPoints) {
+                    key = numberOfPlayersInWeakerClan;
+                    maxPoints = pointsInWeakerClan;
+                }
             }
         }
-        return null;
+        return key != null ? treeMap.get(key).poll() : null;
     }
 
     private boolean clanFitsIn(ClanVisitor clanVisitor, int groupSize, int maxGroupSize) {

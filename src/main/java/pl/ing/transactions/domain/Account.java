@@ -7,6 +7,6 @@ public record Account(String account, int debitCount, int creditCount, BigDecima
 
     @Override
     public int compareTo(Account account) {
-        return balance.compareTo(account.balance());
+        return this.account.compareTo(account.account());
     }
 }
