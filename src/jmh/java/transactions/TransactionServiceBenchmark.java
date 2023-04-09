@@ -1,9 +1,9 @@
 package transactions;
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -35,7 +35,7 @@ public class TransactionServiceBenchmark {
         private static double getRandomDouble() {
             final double MIN = 1.00;
             final double MAX = 100000.00;
-            double random = new Random().nextDouble();
+            double random = new SecureRandom().nextDouble();
             double result = MIN + (random * (MAX - MIN));
             return Math.round(result * 100.0) / 100.0;
         }

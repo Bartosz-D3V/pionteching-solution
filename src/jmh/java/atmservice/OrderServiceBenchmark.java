@@ -1,5 +1,6 @@
 package atmservice;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
@@ -27,7 +28,7 @@ public class OrderServiceBenchmark {
 
         @Setup(Level.Trial)
         public void setup() {
-            var rand = new Random();
+            var rand = new SecureRandom();
             for (int i = 0; i < NUMBER_OF_TASKS; i++) {
                 tasks.add(new Task(rand.nextInt(1000) + 1, randomRequestType(rand), rand.nextInt(1000) + 1));
             }
