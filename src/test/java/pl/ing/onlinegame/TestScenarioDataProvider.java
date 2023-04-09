@@ -258,7 +258,8 @@ public class TestScenarioDataProvider {
                         List.of(
                                 Arrays.asList(
                                         new Clan(2, 60),
-                                        new Clan(4, 40)
+                                        new Clan(3, 40),
+                                        new Clan(1, 15)
                                 ),
                                 List.of(
                                         new Clan(6, 55)
@@ -267,20 +268,74 @@ public class TestScenarioDataProvider {
                                         new Clan(6, 50)
                                 ),
                                 Arrays.asList(
-                                        new Clan(3, 40),
-                                        new Clan(3, 39)
+                                        new Clan(4, 40),
+                                        new Clan(1, 12)
+                                ),
+                                List.of(
+                                        new Clan(5, 40)
                                 ),
                                 Arrays.asList(
-                                        new Clan(5, 40),
-                                        new Clan(1, 15)
+                                        new Clan(3, 39),
+                                        new Clan(3, 30)
                                 ),
-                                Arrays.asList(
-                                        new Clan(3, 30),
-                                        new Clan(1, 12),
+                                List.of(
                                         new Clan(2, 5)
                                 ),
                                 List.of(
                                         new Clan(6, 2)
+                                )
+                        )
+                ),
+                // Scenario XII
+                Arguments.of(
+                        // GIVEN group of expected size:
+                        7,
+                        // WHEN clans are:
+                        Arrays.asList(
+                                new Clan(6, 10),
+                                new Clan(2, 10),
+                                new Clan(1, 15),
+                                new Clan(2, 30),
+                                new Clan(2, 100),
+                                new Clan(7, 100),
+                                new Clan(2, 10),
+                                new Clan(5, 15),
+                                new Clan(4, 40),
+                                new Clan(3, 40),
+                                new Clan(4, 40),
+                                new Clan(1, 5),
+                                new Clan(3, 3),
+                                new Clan(1, 1)
+                        ),
+                        // THEN expect groups as follows:
+                        List.of(
+                                Arrays.asList(
+                                        new Clan(2, 100),
+                                        new Clan(3, 40),
+                                        new Clan(2, 30)
+                                ),
+                                List.of(
+                                        new Clan(7, 100)
+                                ),
+                                Arrays.asList(
+                                        new Clan(4, 40),
+                                        new Clan(1, 15),
+                                        new Clan(2, 10)
+                                ),
+                                Arrays.asList(
+                                        new Clan(4, 40),
+                                        new Clan(2, 10),
+                                        new Clan(1, 5)
+                                ),
+                                Arrays.asList(
+                                        new Clan(5, 15),
+                                        new Clan(1, 1)
+                                ),
+                                List.of(
+                                        new Clan(6, 10)
+                                ),
+                                List.of(
+                                        new Clan(3, 3)
                                 )
                         )
                 )

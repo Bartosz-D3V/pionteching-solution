@@ -11,8 +11,6 @@ import pl.ing.transactions.domain.Transaction;
 
 @Singleton
 public class TransactionServiceImpl implements TransactionService {
-//    response time 95th percentile                       2999
-//    mean response time                                  2428
     @Override
     public Flowable<Account> processTransactions(Collection<Transaction> transactions) {
         if (transactions == null) return Flowable.empty();
