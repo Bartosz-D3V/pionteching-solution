@@ -13,8 +13,6 @@ import pl.ing.transactions.domain.Transaction;
 public class TransactionServiceImpl implements TransactionService {
     @Override
     public Flowable<Account> processTransactions(Collection<Transaction> transactions) {
-        if (transactions == null) return Flowable.empty();
-
         return Flowable.fromIterable(transactions)
                 .reduce(new HashMap<String, Account>(), (acc, transaction) -> {
                     var creditAccount = transaction.creditAccount();
@@ -49,10 +47,6 @@ public class TransactionServiceImpl implements TransactionService {
                                 creditAccount,
                                 (key) -> new Account(
                                         creditAccount, 0, 0, BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP)));
-                        acc.computeIfAbsent(
-                                debitAccount,
-                                (key) -> new Account(
-                                        debitAccount, 0, 0, BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP)));
                     }
 
                     return acc;

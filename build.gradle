@@ -4,7 +4,8 @@ plugins {
     id("io.micronaut.application") version "3.7.4"
     id("io.gatling.gradle") version "3.9.2.2"
     id("com.diffplug.spotless") version "6.17.0"
-    id "me.champeau.jmh" version "0.7.0"
+    id("me.champeau.jmh") version "0.7.0"
+    id("jacoco")
 }
 
 version = "0.1"
@@ -21,10 +22,12 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     implementation("io.reactivex.rxjava3:rxjava:3.1.6")
 
-    implementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'
+    // Java JMH
+    implementation("org.openjdk.jmh:jmh-core:1.36")
+    annotationProcessor("org.openjdk.jmh:jmh-generator-annprocess:1.36")
 
-    implementation 'org.openjdk.jmh:jmh-core:1.36'
-    annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.36'
+    // Tests
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
 }
 
 application {
@@ -46,13 +49,13 @@ micronaut {
 }
 
 spotless {
-    format 'misc', {
-        target '*.gradle', '*.md', '.gitignore', '*.json', '*.yml', '*.xml', '*.sh'
+    format "misc", {
+        target "*.gradle", "*.md", ".gitignore", "*.json", "*.yml", "*.xml", "*.sh"
 
         trimTrailingWhitespace()
         indentWithSpaces(4)
         endWithNewline()
-        setEncoding('utf-8')
+        setEncoding("utf-8")
     }
 
     java {
@@ -60,4 +63,27 @@ spotless {
         palantirJavaFormat()
         targetExclude("**/TestScenarioDataProvider.java")
     }
+}
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "pl/ing/**/Application.class"
+            ])
+        }))
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport
 }
