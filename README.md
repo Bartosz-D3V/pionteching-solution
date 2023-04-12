@@ -7,12 +7,14 @@ This is a Java-based project for participating in programming contest organised 
 It provides a solution for all three programming problems provided in the contest description.
 
 ## Technologies Used
-The project is built using the following technologies:
+The project was built using the following technologies:
 
 * Java 17
 * Micronaut as REST framework
+* RxJava3 for reactive programming
 * JUnit 5 for testing
 * Gatling and Java JMH for performance testing
+* Logback for logging
 
 ## SAST Used
 * [Semgrep](https://semgrep.dev/)
@@ -50,7 +52,7 @@ chmod +x ./run.sh
 ./run.sh
 ```
 
-##Tasks
+## Tasks
 ### Task 1: ATM Service
 #### Time Complexity
 O(n) where n is number of orders.
@@ -71,3 +73,8 @@ O(n) where n is number of transactions.
 
 #### Space Complexity
 O(m) where m is number of bank accounts.
+
+## License
+As provided by the contest organiser:
+
+[Download PDF](https://www.ing.pl/_fileserver/item/5vjf8vh)
