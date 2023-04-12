@@ -15,6 +15,7 @@ The project was built using the following technologies:
 * JUnit 5 for testing
 * Gatling and Java JMH for performance testing
 * Logback for logging
+* Gradle as a build tool and dependency manager
 
 ## SAST Used
 * [Semgrep](https://semgrep.dev/)
