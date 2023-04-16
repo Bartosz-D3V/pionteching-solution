@@ -1,5 +1,6 @@
 [![CI](https://github.com/Bartosz-D3V/pionteching-solution/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/Bartosz-D3V/pionteching-solution/actions/workflows/build.yml)
 [![SAST_Semgrep](https://github.com/Bartosz-D3V/pionteching-solution/actions/workflows/semgrep.yml/badge.svg)](https://github.com/Bartosz-D3V/pionteching-solution/actions/workflows/semgrep.yml)
+[![SAST_CodeQL](https://github.com/Bartosz-D3V/pionteching-solution/actions/workflows/codeql.yml/badge.svg)](https://github.com/Bartosz-D3V/pionteching-solution/actions/workflows/codeql.yml)
 
 # ING Zielony Kod Contest
 This is a Java-based project for participating in programming contest organised by ING - Zielona Tesla za Zielony Kod.

@@ -13,4 +13,12 @@ Przygotuj system który przygotuje odpowiednią kolejność zleceń do obsługi 
 1)	konwój przejeżdża przez regiony biorąc pod uwagę rosnącą kolejność przydzielonych im numerów,
 2)	dany bankomat na liście zleceń dla grupy konwojowej może wystąpić tylko raz.
 
+Najpierw region
+Potem enum
+Potem kolejnosc wystepowania
 
+Od najwazniejszego:
+1. FAILURE_RESTART
+2. PRIORITY
+3. SIGNAL_LOW
+4. STANDARD

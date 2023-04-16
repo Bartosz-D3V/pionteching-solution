@@ -17,7 +17,7 @@ public class AtmServiceIntenseSimulation extends Simulation {
 
     ScenarioBuilder scn = scenario("BasicSimulationWith10SmallSimRequest")
             .during(Duration.ofMinutes(5))
-            .on(exec(http("request_1").post("calculateOrder").body(RawFileBody("atmservice/big_request.json"))));
+            .on(exec(http("request_1").post("/calculateOrder").body(RawFileBody("atmservice/big_request.json"))));
 
     {
         setUp(scn.injectOpen(atOnceUsers(20))).protocols(httpProtocol);
