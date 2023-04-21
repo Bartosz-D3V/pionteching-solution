@@ -2,7 +2,6 @@ package pl.ing.transactions.service;
 
 import io.reactivex.rxjava3.core.Flowable;
 import jakarta.inject.Singleton;
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,10 +42,7 @@ public class TransactionServiceImpl implements TransactionService {
                                                 value.creditCount(),
                                                 value.balance().subtract(amount).setScale(2, RoundingMode.HALF_UP)));
                     } else {
-                        acc.computeIfAbsent(
-                                creditAccount,
-                                (key) -> new Account(
-                                        creditAccount, 0, 0, BigDecimal.ZERO.setScale(2, RoundingMode.HALF_UP)));
+                        acc.computeIfAbsent(creditAccount, (key) -> Account.empty(creditAccount));
                     }
 
                     return acc;
