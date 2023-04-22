@@ -4,12 +4,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Level;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
@@ -39,10 +34,10 @@ public class OrderServiceBenchmark {
         }
     }
 
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    //    @Benchmark
+    //    @BenchmarkMode(Mode.AverageTime)
+    //    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void calculateOrderBench(MyState state) {
-        state.orderService.calculateOrder(state.tasks).toList().blockingGet();
+        state.orderService.calculateOrder(state.tasks);
     }
 }

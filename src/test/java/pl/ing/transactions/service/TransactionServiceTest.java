@@ -14,12 +14,11 @@ class TransactionServiceTest {
 
     @ParameterizedTest
     @MethodSource("pl.ing.transactions.TestScenarioDataProvider#generateData")
-    void processTransactionsShouldReturnAccountsFromSingleTransaction(
+    void processTransactionsShouldReturnAccountsFromTransactionsTest(
             Collection<Transaction> transactions, Collection<Account> expected) {
-        var result =
-                transactionService.processTransactions(transactions).toList().blockingGet();
+        var result = transactionService.processTransactions(transactions);
 
         assertNotNull(result);
-        assertEquals(result, expected);
+        assertEquals(expected, result);
     }
 }

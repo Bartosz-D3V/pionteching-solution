@@ -26,7 +26,7 @@ class TransactionControllerTest {
 
     @ParameterizedTest
     @MethodSource("pl.ing.transactions.TestScenarioDataProvider#generateData")
-    void processTransactionsShouldReturnListOfAccounts(
+    void processTransactionsShouldReturnListOfAccountsTest(
             Collection<Transaction> transactions, Collection<Account> expected) {
         var request = HttpRequest.POST("/report", transactions);
         var response = client.toBlocking()

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -28,7 +29,9 @@ public class TransactionServiceBenchmark {
         @Setup(Level.Trial)
         public void setup() {
             for (int i = 0; i < NUMBER_OF_TRANSACTIONS - 1; i++) {
-                transactions.add(new Transaction("account-1", "account-2", BigDecimal.valueOf(getRandomDouble())));
+                var debitAccount = UUID.randomUUID().toString().substring(0, 2);
+                var creditAccount = UUID.randomUUID().toString().substring(0, 2);
+                transactions.add(new Transaction(debitAccount, creditAccount, BigDecimal.valueOf(getRandomDouble())));
             }
         }
 
@@ -45,9 +48,6 @@ public class TransactionServiceBenchmark {
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void processTransactionsBench(MyState state) {
-        state.transactionService
-                .processTransactions(state.transactions)
-                .toList()
-                .blockingGet();
+        state.transactionService.processTransactions(state.transactions);
     }
 }

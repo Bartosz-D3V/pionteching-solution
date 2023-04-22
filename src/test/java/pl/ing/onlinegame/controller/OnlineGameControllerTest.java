@@ -26,7 +26,7 @@ class OnlineGameControllerTest {
 
     @ParameterizedTest
     @MethodSource("pl.ing.onlinegame.TestScenarioDataProvider#generateData")
-    void calculateGroupsListOfClanGroups(
+    void calculateGroupsShouldReturnListOfClanGroupsTest(
             int maxPlayers, Collection<Clan> clans, Collection<Collection<Clan>> expected) {
         var players = new Players(maxPlayers, clans);
 

@@ -6,7 +6,6 @@ import io.micronaut.http.annotation.Consumes;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
-import io.reactivex.rxjava3.core.Flowable;
 import java.util.Collection;
 import pl.ing.atmservice.domain.Order;
 import pl.ing.atmservice.domain.Task;
@@ -23,7 +22,7 @@ public class TaskController {
     @Post("/calculateOrder")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Flowable<Order> calculateOrder(@Body Collection<Task> tasks) {
+    public Collection<Order> calculateOrder(@Body Collection<Task> tasks) {
         return orderService.calculateOrder(tasks);
     }
 }

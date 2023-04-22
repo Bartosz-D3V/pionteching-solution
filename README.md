@@ -12,10 +12,8 @@ The project was built using the following technologies:
 
 * Java 17
 * Micronaut as REST framework
-* RxJava3 for reactive programming
 * JUnit 5 for testing
 * Gatling and Java JMH for performance testing
-* Logback for logging
 * Gradle as a build tool and dependency manager
 
 ## SAST Used
@@ -56,21 +54,21 @@ chmod +x ./run.sh
 
 ## Tasks
 ### Task 1: ATM Service
-#### Time Complexity
+#### Average Time Complexity
 O(n) where n is number of orders.
 
 #### Space Complexity
 O(n) where n is number of orders.
 
 ### Task 2: Online game
-#### Time Complexity
+#### Average Time Complexity
 O(n) where n is number of clans.
 
 #### Space Complexity
 O(n) where n is number of clans.
 
 ### Task 3: Transactions
-#### Time Complexity
+#### Average Time Complexity
 O(n) where n is number of transactions.
 
 #### Space Complexity

@@ -5,11 +5,6 @@ micronaut:
       location: classpath:banner.txt
   server:
     max-request-size: 524288000 # 500MB
-  netty:
-    event-loops:
-      worker:
-        threads:
-          count: 2
 
 netty:
   default:

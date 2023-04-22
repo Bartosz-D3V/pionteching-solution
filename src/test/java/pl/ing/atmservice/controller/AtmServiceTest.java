@@ -1,4 +1,4 @@
-package pl.ing.atmservice.atmservice;
+package pl.ing.atmservice.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -26,7 +26,7 @@ public class AtmServiceTest {
 
     @ParameterizedTest
     @MethodSource("pl.ing.atmservice.TestScenarioDataProvider#generateData")
-    public void atmServiceEndpointDuplicateTest(Collection<Task> tasks, Collection<Order> expected) {
+    public void atmServiceEndpointShouldReturnOrdersTest(Collection<Task> tasks, Collection<Order> expected) {
         var request = HttpRequest.POST("/calculateOrder", tasks);
         var response = client.toBlocking()
                 .exchange(request.contentType(MediaType.APPLICATION_JSON_TYPE), Argument.listOf(Order.class));
