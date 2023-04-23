@@ -4,6 +4,7 @@ plugins {
     id("io.micronaut.application") version "3.7.4"
     id("io.gatling.gradle") version "3.9.2.2"
     id("com.diffplug.spotless") version "6.17.0"
+    id("name.remal.sonarlint") version "3.0.11"
     id("me.champeau.jmh") version "0.7.0"
     id("jacoco")
 }
@@ -17,10 +18,10 @@ repositories {
 
 dependencies {
     // Micronaut
-    annotationProcessor("io.micronaut:micronaut-http-validation")
-    implementation("io.micronaut:micronaut-http-client")
-    implementation("jakarta.annotation:jakarta.annotation-api")
-    runtimeOnly("ch.qos.logback:logback-classic")
+    annotationProcessor("io.micronaut:micronaut-http-validation:3.9.0")
+    implementation("io.micronaut:micronaut-http-client:3.9.0")
+    implementation("jakarta.annotation:jakarta.annotation-api:2.1.1")
+    runtimeOnly("ch.qos.logback:logback-classic:1.2.11")
 
     // Java JMH
     implementation("org.openjdk.jmh:jmh-core:1.36")

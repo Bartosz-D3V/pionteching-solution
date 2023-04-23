@@ -39,7 +39,7 @@ public class TransactionServiceImpl implements TransactionService {
                                         value.creditCount(),
                                         value.balance().subtract(amount).setScale(2, RoundingMode.HALF_UP)));
             } else {
-                map.computeIfAbsent(creditAccount, (key) -> Account.empty(creditAccount));
+                map.computeIfAbsent(creditAccount, key -> Account.empty(creditAccount));
             }
         }
 

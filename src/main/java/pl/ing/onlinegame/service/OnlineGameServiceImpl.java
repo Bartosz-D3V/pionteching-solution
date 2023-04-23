@@ -1,13 +1,14 @@
 package pl.ing.onlinegame.service;
 
 import jakarta.inject.Singleton;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Stack;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import pl.ing.onlinegame.domain.Clan;
@@ -29,15 +30,15 @@ public class OnlineGameServiceImpl implements OnlineGameService {
 
         var tempGroup = new ArrayList<Clan>();
         var tempGroupSize = 0;
-        var skippedClans = new Stack<ClanVisitor>();
+        var skippedClans = new ArrayDeque<ClanVisitor>();
         for (ClanVisitor clanVisitor : clansTreeSet) {
             if (clanVisitor.isVisited()) continue;
 
             while (!skippedClans.isEmpty()) {
-                ClanVisitor anotherClanVisitor = skippedClans.pop();
-                tempGroup.add(anotherClanVisitor.getClan());
-                tempGroupSize += anotherClanVisitor.getNumberOfPlayers();
-                anotherClanVisitor.markVisited();
+                var skippedClanVisitor = skippedClans.pop();
+                tempGroup.add(skippedClanVisitor.getClan());
+                tempGroupSize += skippedClanVisitor.getNumberOfPlayers();
+                skippedClanVisitor.markVisited();
             }
 
             var clan = clanVisitor.getClan();
@@ -85,7 +86,7 @@ public class OnlineGameServiceImpl implements OnlineGameService {
                 return value;
             });
             clansTreeMap.computeIfAbsent(
-                    clan.numberOfPlayers(), (key) -> new PriorityQueue<>(Collections.singletonList(clanVisitor)));
+                    clan.numberOfPlayers(), key -> new PriorityQueue<>(Collections.singletonList(clanVisitor)));
         }
 
         return new Pair<>(clansTreeMap, clansTreeSet);
@@ -116,7 +117,7 @@ public class OnlineGameServiceImpl implements OnlineGameService {
     }
 
     private static Collection<Collection<Clan>> getOrphanClans(
-            ArrayList<Clan> tempGroup, Stack<ClanVisitor> skippedClans) {
+            ArrayList<Clan> tempGroup, Deque<ClanVisitor> skippedClans) {
         var result = new ArrayList<Collection<Clan>>();
 
         var lastTempGroup = new ArrayList<Clan>();
