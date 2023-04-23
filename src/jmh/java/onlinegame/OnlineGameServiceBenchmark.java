@@ -3,7 +3,12 @@ package onlinegame;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
@@ -17,8 +22,8 @@ public class OnlineGameServiceBenchmark {
 
     @State(Scope.Thread)
     public static class MyState {
-        Players players;
-        OnlineGameService onlineGameService = new OnlineGameServiceImpl();
+        private Players players;
+        private final OnlineGameService onlineGameService = new OnlineGameServiceImpl();
 
         @Setup(Level.Trial)
         public void setup() {
@@ -31,9 +36,9 @@ public class OnlineGameServiceBenchmark {
         }
     }
 
-    //    @Benchmark
-    //    @BenchmarkMode(Mode.AverageTime)
-    //    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void calculateGroupsBench(MyState state) {
         state.onlineGameService.calculateGroups(state.players);
     }

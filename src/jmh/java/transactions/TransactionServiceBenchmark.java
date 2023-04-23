@@ -23,8 +23,8 @@ public class TransactionServiceBenchmark {
 
     @State(Scope.Thread)
     public static class MyState {
-        Collection<Transaction> transactions = new ArrayList<>(NUMBER_OF_TRANSACTIONS);
-        TransactionService transactionService = new TransactionServiceImpl();
+        private final Collection<Transaction> transactions = new ArrayList<>(NUMBER_OF_TRANSACTIONS);
+        private final TransactionService transactionService = new TransactionServiceImpl();
 
         @Setup(Level.Trial)
         public void setup() {
