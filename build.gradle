@@ -41,7 +41,7 @@ java {
 }
 
 micronaut {
-    runtime("netty")
+    runtime("undertow")
     testRuntime("junit5")
     processing {
         incremental(true)
