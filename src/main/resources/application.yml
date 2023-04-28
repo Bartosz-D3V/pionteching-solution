@@ -5,8 +5,3 @@ micronaut:
       location: classpath:banner.txt
   server:
     max-request-size: 524288000 # 500MB
-
-netty:
-  default:
-    allocator:
-      max-order: 3
