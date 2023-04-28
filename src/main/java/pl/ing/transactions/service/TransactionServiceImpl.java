@@ -2,7 +2,6 @@ package pl.ing.transactions.service;
 
 import jakarta.inject.Singleton;
 import java.math.RoundingMode;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import pl.ing.transactions.domain.Account;
@@ -18,31 +17,26 @@ public class TransactionServiceImpl implements TransactionService {
             var debitAccount = transaction.debitAccount();
             var amount = transaction.amount();
 
-            if (!creditAccount.equals(debitAccount)) {
-                map.compute(
-                        creditAccount,
-                        (key, value) -> (value == null)
-                                ? new Account(creditAccount, 0, 1, amount.setScale(2, RoundingMode.HALF_UP))
-                                : new Account(
-                                        creditAccount,
-                                        value.debitCount(),
-                                        value.creditCount() + 1,
-                                        value.balance().add(amount).setScale(2, RoundingMode.HALF_UP)));
-                map.compute(
-                        debitAccount,
-                        (key, value) -> (value == null)
-                                ? new Account(
-                                        debitAccount, 1, 0, amount.negate().setScale(2, RoundingMode.HALF_UP))
-                                : new Account(
-                                        debitAccount,
-                                        value.debitCount() + 1,
-                                        value.creditCount(),
-                                        value.balance().subtract(amount).setScale(2, RoundingMode.HALF_UP)));
-            } else {
-                map.computeIfAbsent(creditAccount, key -> Account.empty(creditAccount));
-            }
+            map.compute(
+                    creditAccount,
+                    (key, value) -> (value == null)
+                            ? new Account(creditAccount, 0, 1, amount.setScale(2, RoundingMode.HALF_UP))
+                            : new Account(
+                                    creditAccount,
+                                    value.debitCount(),
+                                    value.creditCount() + 1,
+                                    value.balance().add(amount).setScale(2, RoundingMode.HALF_UP)));
+            map.compute(
+                    debitAccount,
+                    (key, value) -> (value == null)
+                            ? new Account(debitAccount, 1, 0, amount.negate().setScale(2, RoundingMode.HALF_UP))
+                            : new Account(
+                                    debitAccount,
+                                    value.debitCount() + 1,
+                                    value.creditCount(),
+                                    value.balance().subtract(amount).setScale(2, RoundingMode.HALF_UP)));
         }
 
-        return new ArrayList<>(map.values()).stream().sorted().toList();
+        return map.values().stream().sorted().toList();
     }
 }

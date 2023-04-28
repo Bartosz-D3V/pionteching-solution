@@ -69,32 +69,6 @@ public class TestScenarioDataProvider {
                 Arguments.of(
                         // GIVEN transactions:
                         List.of(
-                                new Transaction("account-1", "account-1", bigDecimalOf(100))
-                        ),
-                        // THEN expect report:
-                        List.of(
-                                new Account("account-1", 0, 0, bigDecimalOf(0))
-                        )
-                ),
-                // Scenario V
-                Arguments.of(
-                        // GIVEN transactions:
-                        List.of(
-                                new Transaction("account-1", "account-1", bigDecimalOf(100)),
-                                new Transaction("account-1", "account-1", bigDecimalOf(-100)),
-                                new Transaction("account-2", "account-2", bigDecimalOf(0)),
-                                new Transaction("account-2", "account-2", bigDecimalOf(500))
-                        ),
-                        // THEN expect report:
-                        List.of(
-                                new Account("account-1", 0, 0, bigDecimalOf(0)),
-                                new Account("account-2", 0, 0, bigDecimalOf(0))
-                        )
-                ),
-                // Scenario VI
-                Arguments.of(
-                        // GIVEN transactions:
-                        List.of(
                                 new Transaction("32309111922661937852684864", "06105023389842834748547303", bigDecimalOf(10.90)),
                                 new Transaction("31074318698137062235845814", "66105036543749403346524547", bigDecimalOf(200.90)),
                                 new Transaction("66105036543749403346524547", "32309111922661937852684864", bigDecimalOf(50.10))
@@ -107,7 +81,7 @@ public class TestScenarioDataProvider {
                                 new Account("66105036543749403346524547", 1, 1, bigDecimalOf(150.80))
                         )
                 ),
-                // Scenario VII
+                // Scenario VI
                 Arguments.of(
                         // GIVEN transactions:
                         List.of(
