@@ -48,7 +48,8 @@ public class OnlineGameServiceImpl implements OnlineGameService {
             } else {
                 skippedClans.add(clanVisitor);
 
-                ClanVisitor weakerClanVisitor = findWeakerClanVisitor(maxGroupSize - tempGroupSize, clanVisitorsTreeMap);
+                ClanVisitor weakerClanVisitor =
+                        findWeakerClanVisitor(maxGroupSize - tempGroupSize, clanVisitorsTreeMap);
                 while (weakerClanVisitor != null && weakerClanVisitor.isVisited()) {
                     weakerClanVisitor = findWeakerClanVisitor(maxGroupSize - tempGroupSize, clanVisitorsTreeMap);
                 }
