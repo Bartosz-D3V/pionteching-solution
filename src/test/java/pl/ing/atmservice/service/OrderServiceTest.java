@@ -3,6 +3,7 @@ package pl.ing.atmservice.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Collection;
+import java.util.List;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import pl.ing.atmservice.domain.Order;
@@ -13,7 +14,7 @@ class OrderServiceTest {
 
     @ParameterizedTest
     @MethodSource("pl.ing.atmservice.TestScenarioDataProvider#generateData")
-    void calculateOrderShouldReturnOrdersTest(Collection<Task> tasks, Collection<Order> expected) {
-        assertEquals(expected, orderService.calculateOrder(tasks));
+    void calculateOrderShouldReturnOrdersTest(List<Task> tasks, Collection<Order> expected) {
+        assertEquals(expected, orderService.calculateOrder(tasks).stream().toList());
     }
 }

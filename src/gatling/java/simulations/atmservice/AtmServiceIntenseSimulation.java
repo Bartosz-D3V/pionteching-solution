@@ -16,7 +16,7 @@ public class AtmServiceIntenseSimulation extends Simulation {
     private final HttpProtocolBuilder httpProtocol = ScenarioHelper.getCommonProtocolBuilder("/atms");
 
     ScenarioBuilder scn = scenario("IntenseSimulationWith10BigSimRequest")
-            .during(Duration.ofMinutes(5))
+            .during(Duration.ofMinutes(3))
             .on(exec(http("request_1").post("/calculateOrder").body(RawFileBody("atmservice/big_request.json"))));
 
     {

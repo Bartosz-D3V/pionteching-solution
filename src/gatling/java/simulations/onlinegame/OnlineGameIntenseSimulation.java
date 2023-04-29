@@ -16,7 +16,7 @@ public class OnlineGameIntenseSimulation extends Simulation {
     private final HttpProtocolBuilder httpProtocol = ScenarioHelper.getCommonProtocolBuilder("/onlinegame");
 
     ScenarioBuilder scn = scenario("IntenseSimulationWith10BigSimRequest")
-            .during(Duration.ofMinutes(5))
+            .during(Duration.ofMinutes(3))
             .on(exec(http("request_1").post("/calculate").body(RawFileBody("onlinegame/big_request.json"))));
 
     {

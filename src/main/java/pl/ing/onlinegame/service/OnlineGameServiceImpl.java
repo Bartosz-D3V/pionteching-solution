@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -81,12 +80,13 @@ public class OnlineGameServiceImpl implements OnlineGameService {
             var clanVisitor = new ClanVisitor(clan);
             clansTreeSet.add(clanVisitor);
 
-            clansTreeMap.computeIfPresent(clan.numberOfPlayers(), (key, value) -> {
-                value.add(clanVisitor);
-                return value;
+            clansTreeMap.compute(clan.numberOfPlayers(), (key, value) -> {
+                if (value != null) {
+                    value.add(clanVisitor);
+                    return value;
+                }
+                return new PriorityQueue<>(Collections.singletonList(clanVisitor));
             });
-            clansTreeMap.computeIfAbsent(
-                    clan.numberOfPlayers(), key -> new PriorityQueue<>(Collections.singletonList(clanVisitor)));
         }
 
         return new Pair<>(clansTreeMap, clansTreeSet);
@@ -96,9 +96,8 @@ public class OnlineGameServiceImpl implements OnlineGameService {
             int freeSpace, TreeMap<Integer, PriorityQueue<ClanVisitor>> treeMap) {
         var maxPoints = 0;
         Integer key = null;
-        for (Map.Entry<Integer, PriorityQueue<ClanVisitor>> weakerClans :
-                treeMap.tailMap(freeSpace, true).entrySet()) {
-            var weakerClansQueue = weakerClans.getValue();
+        for (PriorityQueue<ClanVisitor> weakerClansQueue :
+                treeMap.tailMap(freeSpace, true).values()) {
             var weakerClanVisitor = weakerClansQueue.peek();
 
             if (weakerClanVisitor == null) continue;
