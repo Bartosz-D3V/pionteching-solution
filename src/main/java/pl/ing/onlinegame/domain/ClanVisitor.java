@@ -1,7 +1,6 @@
 package pl.ing.onlinegame.domain;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class ClanVisitor implements Comparable<ClanVisitor> {
     private final Clan clan;
