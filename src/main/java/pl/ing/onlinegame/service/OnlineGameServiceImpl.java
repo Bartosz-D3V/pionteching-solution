@@ -7,9 +7,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Deque;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.TreeMap;
-import java.util.TreeSet;
 import pl.ing.onlinegame.domain.Clan;
 import pl.ing.onlinegame.domain.ClanVisitor;
 import pl.ing.onlinegame.domain.Players;
@@ -24,13 +24,13 @@ public class OnlineGameServiceImpl implements OnlineGameService {
 
         var maxGroupSize = players.groupCount();
         var groupedClans = groupClans(players);
-        var clansTreeMap = groupedClans.first();
-        var clansTreeSet = groupedClans.second();
+        var clanVisitorsTreeMap = groupedClans.first();
+        var clanVisitorsSorted = groupedClans.second();
 
         var tempGroup = new ArrayList<Clan>();
         var tempGroupSize = 0;
         var skippedClans = new ArrayDeque<ClanVisitor>();
-        for (ClanVisitor clanVisitor : clansTreeSet) {
+        for (ClanVisitor clanVisitor : clanVisitorsSorted) {
             if (clanVisitor.isVisited()) continue;
 
             while (!skippedClans.isEmpty()) {
@@ -48,16 +48,16 @@ public class OnlineGameServiceImpl implements OnlineGameService {
             } else {
                 skippedClans.add(clanVisitor);
 
-                ClanVisitor weakerClanVisitor = findWeakerClanVisitor(maxGroupSize - tempGroupSize, clansTreeMap);
+                ClanVisitor weakerClanVisitor = findWeakerClanVisitor(maxGroupSize - tempGroupSize, clanVisitorsTreeMap);
                 while (weakerClanVisitor != null && weakerClanVisitor.isVisited()) {
-                    weakerClanVisitor = findWeakerClanVisitor(maxGroupSize - tempGroupSize, clansTreeMap);
+                    weakerClanVisitor = findWeakerClanVisitor(maxGroupSize - tempGroupSize, clanVisitorsTreeMap);
                 }
                 while (weakerClanVisitor != null) {
                     tempGroup.add(weakerClanVisitor.getClan());
                     tempGroupSize += weakerClanVisitor.getNumberOfPlayers();
                     weakerClanVisitor.markVisited();
 
-                    weakerClanVisitor = findWeakerClanVisitor(maxGroupSize - tempGroupSize, clansTreeMap);
+                    weakerClanVisitor = findWeakerClanVisitor(maxGroupSize - tempGroupSize, clanVisitorsTreeMap);
                 }
 
                 result.add(tempGroup);
@@ -70,17 +70,16 @@ public class OnlineGameServiceImpl implements OnlineGameService {
         return result;
     }
 
-    private static Pair<TreeMap<Integer, PriorityQueue<ClanVisitor>>, TreeSet<ClanVisitor>> groupClans(
-            Players players) {
-        var clansTreeMap = new TreeMap<Integer, PriorityQueue<ClanVisitor>>(Comparator.reverseOrder());
-        var clansTreeSet = new TreeSet<ClanVisitor>();
+    private static Pair<TreeMap<Integer, PriorityQueue<ClanVisitor>>, List<ClanVisitor>> groupClans(Players players) {
+        var clanVisitorsTreeMap = new TreeMap<Integer, PriorityQueue<ClanVisitor>>(Comparator.reverseOrder());
+        var clanVisitorsSorted = new ArrayList<ClanVisitor>();
         for (Clan clan : players.clans()) {
             if (clan.numberOfPlayers() > players.groupCount()) continue;
 
             var clanVisitor = new ClanVisitor(clan);
-            clansTreeSet.add(clanVisitor);
+            clanVisitorsSorted.add(clanVisitor);
 
-            clansTreeMap.compute(clan.numberOfPlayers(), (key, value) -> {
+            clanVisitorsTreeMap.compute(clan.numberOfPlayers(), (key, value) -> {
                 if (value != null) {
                     value.add(clanVisitor);
                     return value;
@@ -88,8 +87,9 @@ public class OnlineGameServiceImpl implements OnlineGameService {
                 return new PriorityQueue<>(Collections.singletonList(clanVisitor));
             });
         }
+        clanVisitorsSorted.sort(ClanVisitor::compareTo);
 
-        return new Pair<>(clansTreeMap, clansTreeSet);
+        return new Pair<>(clanVisitorsTreeMap, clanVisitorsSorted);
     }
 
     private static ClanVisitor findWeakerClanVisitor(
