@@ -1,18 +1,23 @@
 package transactions;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 import pl.ing.transactions.domain.Transaction;
 import pl.ing.transactions.service.TransactionService;
 import pl.ing.transactions.service.TransactionServiceImpl;
@@ -22,13 +27,15 @@ public class TransactionServiceBenchmark {
 
     @State(Scope.Thread)
     public static class MyState {
-        Collection<Transaction> transactions = new ArrayList<>(NUMBER_OF_TRANSACTIONS);
-        TransactionService transactionService = new TransactionServiceImpl();
+        private final Collection<Transaction> transactions = new ArrayList<>(NUMBER_OF_TRANSACTIONS);
+        private final TransactionService transactionService = new TransactionServiceImpl();
 
         @Setup(Level.Trial)
         public void setup() {
             for (int i = 0; i < NUMBER_OF_TRANSACTIONS - 1; i++) {
-                transactions.add(new Transaction("account-1", "account-2", BigDecimal.valueOf(getRandomDouble())));
+                var debitAccount = UUID.randomUUID().toString().substring(0, 2);
+                var creditAccount = UUID.randomUUID().toString().substring(0, 2);
+                transactions.add(new Transaction(debitAccount, creditAccount, BigDecimal.valueOf(getRandomDouble())));
             }
         }
 
@@ -44,10 +51,9 @@ public class TransactionServiceBenchmark {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @Warmup(iterations = 5, time = 50, timeUnit = MILLISECONDS)
+    @Measurement(iterations = 10, time = 50, timeUnit = MILLISECONDS)
     public void processTransactionsBench(MyState state) {
-        state.transactionService
-                .processTransactions(state.transactions)
-                .toList()
-                .blockingGet();
+        state.transactionService.processTransactions(state.transactions);
     }
 }

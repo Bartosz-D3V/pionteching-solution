@@ -15,11 +15,11 @@ import simulations.helpers.ScenarioHelper;
 public class AtmServiceIntenseSimulation extends Simulation {
     private final HttpProtocolBuilder httpProtocol = ScenarioHelper.getCommonProtocolBuilder("/atms");
 
-    ScenarioBuilder scn = scenario("BasicSimulationWith10SmallSimRequest")
-            .during(Duration.ofMinutes(5))
-            .on(exec(http("request_1").post("calculateOrder").body(RawFileBody("atmservice/big_request.json"))));
+    ScenarioBuilder scn = scenario("IntenseSimulationWith10BigSimRequest")
+            .during(Duration.ofMinutes(3))
+            .on(exec(http("request_1").post("/calculateOrder").body(RawFileBody("atmservice/big_request.json"))));
 
     {
-        setUp(scn.injectOpen(atOnceUsers(20))).protocols(httpProtocol);
+        setUp(scn.injectOpen(atOnceUsers(10))).protocols(httpProtocol);
     }
 }

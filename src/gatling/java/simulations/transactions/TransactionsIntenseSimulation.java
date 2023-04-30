@@ -15,8 +15,7 @@ import simulations.helpers.ScenarioHelper;
 
 public class TransactionsIntenseSimulation extends Simulation {
     private final HttpProtocolBuilder httpProtocol = ScenarioHelper.getCommonProtocolBuilder("/transactions");
-
-    ScenarioBuilder scn = scenario("BasicSimulationWith10BigSimRequest")
+    ScenarioBuilder scn = scenario("IntenseSimulationWith10BigSimRequest")
             .during(Duration.ofMinutes(3))
             .on(exec(http("request_1")
                     .post("/report")

@@ -5,6 +5,9 @@ import static io.gatling.javaapi.http.HttpDsl.http;
 import io.gatling.javaapi.http.HttpProtocolBuilder;
 
 public class ScenarioHelper {
+
+    private ScenarioHelper() {}
+
     public static HttpProtocolBuilder getCommonProtocolBuilder(String path) {
         return http.baseUrl("http://localhost:8080/".concat(path))
                 .acceptHeader("*/*")

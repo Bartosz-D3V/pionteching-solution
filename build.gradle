@@ -4,7 +4,9 @@ plugins {
     id("io.micronaut.application") version "3.7.4"
     id("io.gatling.gradle") version "3.9.2.2"
     id("com.diffplug.spotless") version "6.17.0"
-    id "me.champeau.jmh" version "0.7.0"
+    id("name.remal.sonarlint") version "3.0.11"
+    id("me.champeau.jmh") version "0.7.0"
+    id("jacoco")
 }
 
 version = "0.1"
@@ -15,16 +17,18 @@ repositories {
 }
 
 dependencies {
-    annotationProcessor("io.micronaut:micronaut-http-validation")
-    implementation("io.micronaut:micronaut-http-client")
-    implementation("jakarta.annotation:jakarta.annotation-api")
-    runtimeOnly("ch.qos.logback:logback-classic")
-    implementation("io.reactivex.rxjava3:rxjava:3.1.6")
+    // Micronaut
+    annotationProcessor("io.micronaut:micronaut-http-validation:3.9.0")
+    implementation("io.micronaut:micronaut-http-client:3.9.0")
+    implementation("jakarta.annotation:jakarta.annotation-api:2.1.1")
+    runtimeOnly("ch.qos.logback:logback-classic:1.2.11")
 
-    implementation 'org.junit.jupiter:junit-jupiter-params:5.9.2'
+    // Java JMH
+    implementation("org.openjdk.jmh:jmh-core:1.36")
+    annotationProcessor("org.openjdk.jmh:jmh-generator-annprocess:1.36")
 
-    implementation 'org.openjdk.jmh:jmh-core:1.36'
-    annotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.36'
+    // Testing
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
 }
 
 application {
@@ -37,7 +41,7 @@ java {
 }
 
 micronaut {
-    runtime("netty")
+    runtime("undertow")
     testRuntime("junit5")
     processing {
         incremental(true)
@@ -46,13 +50,13 @@ micronaut {
 }
 
 spotless {
-    format 'misc', {
-        target '*.gradle', '*.md', '.gitignore', '*.json', '*.yml', '*.xml', '*.sh'
+    format "misc", {
+        target "*.gradle", "*.md", ".gitignore", "*.json", "*.yml", "*.xml", "*.sh"
 
         trimTrailingWhitespace()
         indentWithSpaces(4)
         endWithNewline()
-        setEncoding('utf-8')
+        setEncoding("utf-8")
     }
 
     java {
@@ -60,4 +64,27 @@ spotless {
         palantirJavaFormat()
         targetExclude("**/TestScenarioDataProvider.java")
     }
+}
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = true
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    "pl/ing/**/Application.class"
+            ])
+        }))
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport
 }

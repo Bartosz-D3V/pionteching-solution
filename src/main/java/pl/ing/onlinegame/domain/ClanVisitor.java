@@ -1,16 +1,14 @@
 package pl.ing.onlinegame.domain;
 
-import java.util.UUID;
+import java.util.Objects;
 
 public class ClanVisitor implements Comparable<ClanVisitor> {
     private final Clan clan;
-    private final UUID id;
     private boolean visited;
 
     public ClanVisitor(Clan clan) {
         this.clan = clan;
         this.visited = false;
-        this.id = UUID.randomUUID();
     }
 
     public Clan getClan() {
@@ -31,10 +29,19 @@ public class ClanVisitor implements Comparable<ClanVisitor> {
 
     @Override
     public int compareTo(ClanVisitor clanVisitor) {
-        var clanCompare = clan.compareTo(clanVisitor.getClan());
-        if (clanCompare == 0) {
-            return id.compareTo(clanVisitor.id);
-        }
-        return clanCompare;
+        return clan.compareTo(clanVisitor.getClan());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClanVisitor that = (ClanVisitor) o;
+        return visited == that.visited && Objects.equals(clan, that.clan);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clan, visited);
     }
 }

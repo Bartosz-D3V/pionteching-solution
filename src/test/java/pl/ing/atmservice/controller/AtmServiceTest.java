@@ -1,4 +1,4 @@
-package pl.ing.atmservice.atmservice;
+package pl.ing.atmservice.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -13,6 +13,7 @@ import io.micronaut.http.client.annotation.Client;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import jakarta.inject.Inject;
 import java.util.Collection;
+import java.util.List;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import pl.ing.atmservice.domain.Order;
@@ -26,7 +27,7 @@ public class AtmServiceTest {
 
     @ParameterizedTest
     @MethodSource("pl.ing.atmservice.TestScenarioDataProvider#generateData")
-    public void atmServiceEndpointDuplicateTest(Collection<Task> tasks, Collection<Order> expected) {
+    public void atmServiceEndpointShouldReturnOrdersTest(List<Task> tasks, Collection<Order> expected) {
         var request = HttpRequest.POST("/calculateOrder", tasks);
         var response = client.toBlocking()
                 .exchange(request.contentType(MediaType.APPLICATION_JSON_TYPE), Argument.listOf(Order.class));
