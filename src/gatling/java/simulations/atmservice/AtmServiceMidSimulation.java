@@ -14,15 +14,15 @@ import io.gatling.javaapi.http.HttpProtocolBuilder;
 import java.time.Duration;
 import simulations.helpers.ScenarioHelper;
 
-public class AtmServiceBasicSimulation extends Simulation {
+public class AtmServiceMidSimulation extends Simulation {
     private final HttpProtocolBuilder httpProtocol = ScenarioHelper.getCommonProtocolBuilder("/atms");
 
-    ScenarioBuilder scn = scenario("BasicSimulationWith10SmallSimRequest")
+    ScenarioBuilder scn = scenario("BasicSimulationWith10MediumSimRequest")
             .during(Duration.ofMinutes(3))
-            .on(exec(http("request_1").post("/calculateOrder").body(RawFileBody("atmservice/small_request.json"))));
+            .on(exec(http("request_1").post("/calculateOrder").body(RawFileBody("atmservice/mid_request.json"))));
 
     {
-        setUp(scn.injectClosed(constantConcurrentUsers(10).during(Duration.ofMinutes(2))))
+        setUp(scn.injectClosed(constantConcurrentUsers(10).during(Duration.ofMinutes(3))))
                 .throttle(
                         reachRps(500).in(Duration.ofSeconds(10)),
                         holdFor(Duration.ofMinutes(1)),

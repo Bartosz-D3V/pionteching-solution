@@ -3,7 +3,9 @@ package simulations.transactions;
 import static io.gatling.javaapi.core.CoreDsl.RawFileBody;
 import static io.gatling.javaapi.core.CoreDsl.atOnceUsers;
 import static io.gatling.javaapi.core.CoreDsl.exec;
+import static io.gatling.javaapi.core.CoreDsl.holdFor;
 import static io.gatling.javaapi.core.CoreDsl.jsonPath;
+import static io.gatling.javaapi.core.CoreDsl.reachRps;
 import static io.gatling.javaapi.core.CoreDsl.scenario;
 import static io.gatling.javaapi.http.HttpDsl.http;
 
@@ -24,6 +26,10 @@ public class TransactionsBasicSimulation extends Simulation {
                     .check(jsonPath("$[*].balance").ofInt().is(0))));
 
     {
-        setUp(scn.injectOpen(atOnceUsers(10))).protocols(httpProtocol);
+        setUp(scn.injectOpen(atOnceUsers(10))
+                        .throttle(
+                                reachRps(500).in(Duration.ofSeconds(10)), holdFor(Duration.ofMinutes(1)),
+                                reachRps(1000).in(Duration.ofSeconds(10)), holdFor(Duration.ofMinutes(2))))
+                .protocols(httpProtocol);
     }
 }
