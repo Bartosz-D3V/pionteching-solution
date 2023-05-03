@@ -5,14 +5,14 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 
 public class Region {
-    private final int region;
+    private final int regionNumber;
     private final Collection<Integer> failureRestartQueue = new ArrayList<>();
     private final Collection<Integer> priorityQueue = new ArrayList<>();
     private final Collection<Integer> signalLowQueue = new ArrayList<>();
     private final Collection<Integer> standardQueue = new ArrayList<>();
 
-    public Region(int region) {
-        this.region = region;
+    public Region(int regionNumber) {
+        this.regionNumber = regionNumber;
     }
 
     public void add(Task task) {
@@ -28,16 +28,16 @@ public class Region {
         var orders = new LinkedHashSet<Order>();
 
         for (Integer i : failureRestartQueue) {
-            orders.add(new Order(region, i));
+            orders.add(new Order(regionNumber, i));
         }
         for (Integer i : priorityQueue) {
-            orders.add(new Order(region, i));
+            orders.add(new Order(regionNumber, i));
         }
         for (Integer i : signalLowQueue) {
-            orders.add(new Order(region, i));
+            orders.add(new Order(regionNumber, i));
         }
         for (Integer i : standardQueue) {
-            orders.add(new Order(region, i));
+            orders.add(new Order(regionNumber, i));
         }
 
         return orders;

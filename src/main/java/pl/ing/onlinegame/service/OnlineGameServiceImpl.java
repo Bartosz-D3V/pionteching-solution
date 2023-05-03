@@ -5,13 +5,9 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Deque;
-import java.util.List;
 import java.util.PriorityQueue;
-import java.util.TreeMap;
 import pl.ing.onlinegame.domain.Clan;
-import pl.ing.onlinegame.domain.ClanVisitor;
 import pl.ing.onlinegame.domain.Players;
 import pl.ing.util.Pair;
 
@@ -24,41 +20,30 @@ public class OnlineGameServiceImpl implements OnlineGameService {
 
         var maxGroupSize = players.groupCount();
         var groupedClans = groupClans(players);
-        var clanVisitorsTreeMap = groupedClans.first();
-        var clanVisitorsSorted = groupedClans.second();
+        var clansMap = groupedClans.first();
+        var clansSorted = groupedClans.second();
 
         var tempGroup = new ArrayList<Clan>();
         var tempGroupSize = 0;
-        var skippedClans = new ArrayDeque<ClanVisitor>();
-        for (ClanVisitor clanVisitor : clanVisitorsSorted) {
-            if (clanVisitor.isVisited()) continue;
+        var skippedClans = new ArrayDeque<Clan>();
+        for (Clan clan : clansSorted) {
+            if (clan.isVisited()) continue;
 
-            while (!skippedClans.isEmpty()) {
-                var skippedClanVisitor = skippedClans.pop();
-                tempGroup.add(skippedClanVisitor.getClan());
-                tempGroupSize += skippedClanVisitor.getNumberOfPlayers();
-                skippedClanVisitor.markVisited();
-            }
+            tempGroupSize = takeSkippedClans(tempGroup, tempGroupSize, skippedClans);
 
-            var clan = clanVisitor.getClan();
-            if (clanFitsIn(clanVisitor, tempGroupSize, maxGroupSize)) {
-                tempGroup.add(clan);
-                tempGroupSize += clan.numberOfPlayers();
-                clanVisitor.markVisited();
+            if (clanFitsIn(clan, tempGroupSize, maxGroupSize)) {
+                tempGroupSize = addClanToGroup(tempGroup, tempGroupSize, clan);
             } else {
-                skippedClans.add(clanVisitor);
+                skippedClans.add(clan);
 
-                ClanVisitor weakerClanVisitor =
-                        findWeakerClanVisitor(maxGroupSize - tempGroupSize, clanVisitorsTreeMap);
-                while (weakerClanVisitor != null && weakerClanVisitor.isVisited()) {
-                    weakerClanVisitor = findWeakerClanVisitor(maxGroupSize - tempGroupSize, clanVisitorsTreeMap);
+                Clan weakerClan = findWeakerClan(maxGroupSize - tempGroupSize, clansMap);
+                while (weakerClan != null && weakerClan.isVisited()) {
+                    weakerClan = findWeakerClan(maxGroupSize - tempGroupSize, clansMap);
                 }
-                while (weakerClanVisitor != null) {
-                    tempGroup.add(weakerClanVisitor.getClan());
-                    tempGroupSize += weakerClanVisitor.getNumberOfPlayers();
-                    weakerClanVisitor.markVisited();
+                while (weakerClan != null) {
+                    tempGroupSize = addClanToGroup(tempGroup, tempGroupSize, weakerClan);
 
-                    weakerClanVisitor = findWeakerClanVisitor(maxGroupSize - tempGroupSize, clanVisitorsTreeMap);
+                    weakerClan = findWeakerClan(maxGroupSize - tempGroupSize, clansMap);
                 }
 
                 result.add(tempGroup);
@@ -71,59 +56,71 @@ public class OnlineGameServiceImpl implements OnlineGameService {
         return result;
     }
 
-    private static Pair<TreeMap<Integer, PriorityQueue<ClanVisitor>>, List<ClanVisitor>> groupClans(Players players) {
-        var clanVisitorsTreeMap = new TreeMap<Integer, PriorityQueue<ClanVisitor>>(Comparator.reverseOrder());
-        var clanVisitorsSorted = new ArrayList<ClanVisitor>();
-        for (Clan clan : players.clans()) {
-            if (clan.numberOfPlayers() > players.groupCount()) continue;
-
-            var clanVisitor = new ClanVisitor(clan);
-            clanVisitorsSorted.add(clanVisitor);
-
-            clanVisitorsTreeMap.compute(clan.numberOfPlayers(), (key, value) -> {
-                if (value != null) {
-                    value.add(clanVisitor);
-                    return value;
-                }
-                return new PriorityQueue<>(Collections.singletonList(clanVisitor));
-            });
+    private static int takeSkippedClans(Collection<Clan> tempGroup, int tempGroupSize, Deque<Clan> skippedClans) {
+        while (!skippedClans.isEmpty()) {
+            var skippedClan = skippedClans.pop();
+            tempGroupSize = addClanToGroup(tempGroup, tempGroupSize, skippedClan);
         }
-        clanVisitorsSorted.sort(ClanVisitor::compareTo);
-
-        return new Pair<>(clanVisitorsTreeMap, clanVisitorsSorted);
+        return tempGroupSize;
     }
 
-    private static ClanVisitor findWeakerClanVisitor(
-            int freeSpace, TreeMap<Integer, PriorityQueue<ClanVisitor>> treeMap) {
+    private static int addClanToGroup(Collection<Clan> tempGroup, int tempGroupSize, Clan clan) {
+        tempGroup.add(clan);
+        tempGroupSize += clan.getNumberOfPlayers();
+        clan.markVisited();
+        return tempGroupSize;
+    }
+
+    private static Pair<PriorityQueue<Clan>[], Collection<Clan>> groupClans(Players players) {
+        @SuppressWarnings("unchecked")
+        var clansMap = (PriorityQueue<Clan>[]) new PriorityQueue<?>[players.groupCount() + 1];
+        var clansSorted = new ArrayList<Clan>();
+
+        for (Clan clan : players.clans()) {
+            if (clan.getNumberOfPlayers() > players.groupCount()) continue;
+
+            clansSorted.add(clan);
+
+            PriorityQueue<Clan> pq = clansMap[clan.getNumberOfPlayers()];
+            if (pq != null) {
+                pq.add(clan);
+                clansMap[clan.getNumberOfPlayers()] = pq;
+            } else {
+                clansMap[clan.getNumberOfPlayers()] = new PriorityQueue<>(Collections.singletonList(clan));
+            }
+        }
+        clansSorted.sort(Clan::compareTo);
+
+        return new Pair<>(clansMap, clansSorted);
+    }
+
+    private static Clan findWeakerClan(int freeSpace, PriorityQueue<Clan>[] clansMap) {
         var maxPoints = 0;
-        Integer key = null;
-        for (PriorityQueue<ClanVisitor> weakerClansQueue :
-                treeMap.tailMap(freeSpace, true).values()) {
-            var weakerClanVisitor = weakerClansQueue.peek();
+        var maxKey = -1;
+        for (int i = freeSpace; i >= 0; i--) {
+            PriorityQueue<Clan> weakerClansQueue = clansMap[i];
 
-            if (weakerClanVisitor == null) continue;
+            if (weakerClansQueue == null || weakerClansQueue.peek() == null) continue;
+            Clan weakerClan = weakerClansQueue.peek();
 
-            int pointsInWeakerClan = weakerClanVisitor.getClan().points();
+            int pointsInWeakerClan = weakerClan.getPoints();
             if (pointsInWeakerClan >= maxPoints) {
-                key = weakerClanVisitor.getNumberOfPlayers();
+                maxKey = weakerClan.getNumberOfPlayers();
                 maxPoints = pointsInWeakerClan;
             }
         }
-        return key != null ? treeMap.get(key).poll() : null;
+
+        return maxKey != -1 ? clansMap[maxKey].poll() : null;
     }
 
-    private static boolean clanFitsIn(ClanVisitor clanVisitor, int groupSize, int maxGroupSize) {
-        return clanVisitor.getNumberOfPlayers() + groupSize <= maxGroupSize;
+    private static boolean clanFitsIn(Clan clan, int groupSize, int maxGroupSize) {
+        return clan.getNumberOfPlayers() + groupSize <= maxGroupSize;
     }
 
-    private static Collection<Collection<Clan>> getOrphanClans(
-            ArrayList<Clan> tempGroup, Deque<ClanVisitor> skippedClans) {
+    private static Collection<Collection<Clan>> getOrphanClans(ArrayList<Clan> tempGroup, Deque<Clan> skippedClans) {
         var result = new ArrayList<Collection<Clan>>();
 
-        var lastTempGroup = new ArrayList<Clan>();
-        for (ClanVisitor clanVisitor : skippedClans) {
-            lastTempGroup.add(clanVisitor.getClan());
-        }
+        var lastTempGroup = new ArrayList<>(skippedClans);
 
         if (!tempGroup.isEmpty()) {
             result.add(tempGroup);
