@@ -65,7 +65,7 @@ O(n) where n is number of orders.
 O(n) where n is number of clans.
 
 #### Space Complexity
-O(n) where n is number of clans.
+O(m) where m is number of maximum players per group.
 
 ### Task 3: Transactions
 #### Average Time Complexity
@@ -73,6 +73,9 @@ O(n) where n is number of transactions.
 
 #### Space Complexity
 O(m) where m is number of bank accounts.
+
+## Disclaimer
+The application was developed with a focus on achieving high speed and throughput.
 
 ## License
 As provided by the contest organiser:

@@ -19,8 +19,7 @@ public class OnlineGameServiceImpl implements OnlineGameService {
         if (players.clans() == null || players.clans().isEmpty()) return result;
 
         var maxGroupSize = players.groupCount();
-        var maxPlayers = players.clans().stream().map(Clan::getNumberOfPlayers).reduce(-1, Integer::max);
-        var groupedClans = groupClans(players, maxPlayers);
+        var groupedClans = groupClans(players);
         var clansMap = groupedClans.first();
         var clansSorted = groupedClans.second();
 
@@ -30,17 +29,10 @@ public class OnlineGameServiceImpl implements OnlineGameService {
         for (Clan clan : clansSorted) {
             if (clan.isVisited()) continue;
 
-            while (!skippedClans.isEmpty()) {
-                var skippedClan = skippedClans.pop();
-                tempGroup.add(skippedClan);
-                tempGroupSize += skippedClan.getNumberOfPlayers();
-                skippedClan.markVisited();
-            }
+            tempGroupSize = takeSkippedClans(tempGroup, tempGroupSize, skippedClans);
 
             if (clanFitsIn(clan, tempGroupSize, maxGroupSize)) {
-                tempGroup.add(clan);
-                tempGroupSize += clan.getNumberOfPlayers();
-                clan.markVisited();
+                tempGroupSize = addClanToGroup(tempGroup, tempGroupSize, clan);
             } else {
                 skippedClans.add(clan);
 
@@ -49,9 +41,7 @@ public class OnlineGameServiceImpl implements OnlineGameService {
                     weakerClan = findWeakerClan(maxGroupSize - tempGroupSize, clansMap);
                 }
                 while (weakerClan != null) {
-                    tempGroup.add(weakerClan);
-                    tempGroupSize += weakerClan.getNumberOfPlayers();
-                    weakerClan.markVisited();
+                    tempGroupSize = addClanToGroup(tempGroup, tempGroupSize, weakerClan);
 
                     weakerClan = findWeakerClan(maxGroupSize - tempGroupSize, clansMap);
                 }
@@ -66,9 +56,24 @@ public class OnlineGameServiceImpl implements OnlineGameService {
         return result;
     }
 
-    private static Pair<PriorityQueue<Clan>[], Collection<Clan>> groupClans(Players players, Integer maxPlayers) {
+    private static int takeSkippedClans(Collection<Clan> tempGroup, int tempGroupSize, Deque<Clan> skippedClans) {
+        while (!skippedClans.isEmpty()) {
+            var skippedClan = skippedClans.pop();
+            tempGroupSize = addClanToGroup(tempGroup, tempGroupSize, skippedClan);
+        }
+        return tempGroupSize;
+    }
+
+    private static int addClanToGroup(Collection<Clan> tempGroup, int tempGroupSize, Clan clan) {
+        tempGroup.add(clan);
+        tempGroupSize += clan.getNumberOfPlayers();
+        clan.markVisited();
+        return tempGroupSize;
+    }
+
+    private static Pair<PriorityQueue<Clan>[], Collection<Clan>> groupClans(Players players) {
         @SuppressWarnings("unchecked")
-        var clansMap = (PriorityQueue<Clan>[]) new PriorityQueue<?>[maxPlayers + 1];
+        var clansMap = (PriorityQueue<Clan>[]) new PriorityQueue<?>[players.groupCount() + 1];
         var clansSorted = new ArrayList<Clan>();
 
         for (Clan clan : players.clans()) {
