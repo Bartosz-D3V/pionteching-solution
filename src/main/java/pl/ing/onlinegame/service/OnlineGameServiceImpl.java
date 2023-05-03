@@ -113,8 +113,8 @@ public class OnlineGameServiceImpl implements OnlineGameService {
         return maxKey != -1 ? clansMap[maxKey].poll() : null;
     }
 
-    private static boolean clanFitsIn(Clan clanVisitor, int groupSize, int maxGroupSize) {
-        return clanVisitor.getNumberOfPlayers() + groupSize <= maxGroupSize;
+    private static boolean clanFitsIn(Clan clan, int groupSize, int maxGroupSize) {
+        return clan.getNumberOfPlayers() + groupSize <= maxGroupSize;
     }
 
     private static Collection<Collection<Clan>> getOrphanClans(ArrayList<Clan> tempGroup, Deque<Clan> skippedClans) {
