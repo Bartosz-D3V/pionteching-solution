@@ -37,9 +37,6 @@ public class OnlineGameServiceImpl implements OnlineGameService {
                 skippedClans.add(clan);
 
                 Clan weakerClan = findWeakerClan(maxGroupSize - tempGroupSize, clansMap);
-                while (weakerClan != null && weakerClan.isVisited()) {
-                    weakerClan = findWeakerClan(maxGroupSize - tempGroupSize, clansMap);
-                }
                 while (weakerClan != null) {
                     tempGroupSize = addClanToGroup(tempGroup, tempGroupSize, weakerClan);
 
@@ -105,12 +102,14 @@ public class OnlineGameServiceImpl implements OnlineGameService {
 
             int pointsInWeakerClan = weakerClan.getPoints();
             if (pointsInWeakerClan >= maxPoints) {
-                maxKey = weakerClan.getNumberOfPlayers();
-                maxPoints = pointsInWeakerClan;
+                if (!weakerClan.isVisited()) {
+                    maxKey = weakerClan.getNumberOfPlayers();
+                    maxPoints = pointsInWeakerClan;
+                } else weakerClansQueue.poll();
             }
         }
 
-        return maxKey != -1 ? clansMap[maxKey].poll() : null;
+        return maxKey == -1 ? null : clansMap[maxKey].poll();
     }
 
     private static boolean clanFitsIn(Clan clan, int groupSize, int maxGroupSize) {
