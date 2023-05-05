@@ -1,6 +1,6 @@
 package pl.ing.transactions.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Collection;
@@ -19,6 +19,6 @@ class TransactionServiceTest {
         var result = transactionService.processTransactions(transactions);
 
         assertNotNull(result);
-        assertEquals(expected, result);
+        assertIterableEquals(expected, result);
     }
 }

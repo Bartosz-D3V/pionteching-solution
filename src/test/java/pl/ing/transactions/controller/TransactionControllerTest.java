@@ -1,6 +1,7 @@
 package pl.ing.transactions.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import io.micronaut.core.type.Argument;
@@ -37,6 +38,6 @@ class TransactionControllerTest {
 
         var result = response.body();
         assertNotNull(result);
-        assertEquals(expected, result);
+        assertIterableEquals(expected, result);
     }
 }

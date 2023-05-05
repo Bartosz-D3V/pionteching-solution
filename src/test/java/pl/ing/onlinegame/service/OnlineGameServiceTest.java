@@ -1,6 +1,6 @@
 package pl.ing.onlinegame.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Collection;
@@ -19,6 +19,6 @@ class OnlineGameServiceTest {
         final Collection<Collection<Clan>> result = onlineGameService.calculateGroups(new Players(maxPlayers, clans));
 
         assertNotNull(result);
-        assertEquals(expected, result);
+        assertIterableEquals(expected, result);
     }
 }

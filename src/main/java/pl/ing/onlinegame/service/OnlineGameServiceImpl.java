@@ -119,13 +119,11 @@ public class OnlineGameServiceImpl implements OnlineGameService {
     private static Collection<Collection<Clan>> getOrphanClans(ArrayList<Clan> tempGroup, Deque<Clan> skippedClans) {
         var result = new ArrayList<Collection<Clan>>();
 
-        var lastTempGroup = new ArrayList<>(skippedClans);
-
         if (!tempGroup.isEmpty()) {
             result.add(tempGroup);
         }
-        if (!lastTempGroup.isEmpty()) {
-            result.add(lastTempGroup);
+        if (!skippedClans.isEmpty()) {
+            result.add(skippedClans);
         }
 
         return result;
