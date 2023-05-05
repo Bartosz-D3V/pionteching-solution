@@ -71,7 +71,7 @@ public class OnlineGameServiceImpl implements OnlineGameService {
     private static Pair<PriorityQueue<Clan>[], Collection<Clan>> groupClans(Players players) {
         @SuppressWarnings("unchecked")
         var clansMap = (PriorityQueue<Clan>[]) new PriorityQueue<?>[players.groupCount() + 1];
-        var clansSorted = new ArrayList<Clan>();
+        var clansSorted = new ArrayList<Clan>(players.clans().size());
 
         for (Clan clan : players.clans()) {
             if (clan.getNumberOfPlayers() > players.groupCount()) continue;
