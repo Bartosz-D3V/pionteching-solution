@@ -25,7 +25,7 @@ public class OrderServiceBenchmark {
     private static final int NUMBER_OF_TASKS = 20000;
 
     @State(Scope.Thread)
-    public static class MyState {
+    public static class BenchState {
         private final List<Task> tasks = new ArrayList<>(NUMBER_OF_TASKS);
         private final OrderService orderService = new OrderServiceImpl();
 
@@ -47,7 +47,7 @@ public class OrderServiceBenchmark {
     @OutputTimeUnit(MILLISECONDS)
     @Warmup(iterations = 5, time = 50, timeUnit = MILLISECONDS)
     @Measurement(iterations = 10, time = 50, timeUnit = MILLISECONDS)
-    public void calculateOrderBench(MyState state) {
+    public void calculateOrderBench(BenchState state) {
         state.orderService.calculateOrder(state.tasks);
     }
 }

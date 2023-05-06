@@ -1,6 +1,6 @@
 package pl.ing.atmservice.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,6 +15,7 @@ class OrderServiceTest {
     @ParameterizedTest
     @MethodSource("pl.ing.atmservice.TestScenarioDataProvider#generateData")
     void calculateOrderShouldReturnOrdersTest(List<Task> tasks, Collection<Order> expected) {
-        assertEquals(expected, orderService.calculateOrder(tasks).stream().toList());
+        assertIterableEquals(
+                expected, orderService.calculateOrder(tasks).stream().toList());
     }
 }
