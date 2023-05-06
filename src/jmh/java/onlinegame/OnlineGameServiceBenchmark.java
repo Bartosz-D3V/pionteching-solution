@@ -25,7 +25,7 @@ public class OnlineGameServiceBenchmark {
     private static final int NUMBER_OF_CLANS = 20000;
 
     @State(Scope.Thread)
-    public static class MyState {
+    public static class BenchState {
         private Players players;
         private final OnlineGameService onlineGameService = new OnlineGameServiceImpl();
 
@@ -45,7 +45,7 @@ public class OnlineGameServiceBenchmark {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     @Warmup(iterations = 5, time = 50, timeUnit = MILLISECONDS)
     @Measurement(iterations = 10, time = 50, timeUnit = MILLISECONDS)
-    public void calculateGroupsBench(MyState state) {
+    public void calculateGroupsBench(BenchState state) {
         state.onlineGameService.calculateGroups(state.players);
     }
 }

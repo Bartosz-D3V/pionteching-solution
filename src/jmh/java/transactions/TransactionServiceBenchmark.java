@@ -26,7 +26,7 @@ public class TransactionServiceBenchmark {
     private static final int NUMBER_OF_TRANSACTIONS = 100000;
 
     @State(Scope.Thread)
-    public static class MyState {
+    public static class BenchState {
         private final Collection<Transaction> transactions = new ArrayList<>(NUMBER_OF_TRANSACTIONS);
         private final TransactionService transactionService = new TransactionServiceImpl();
 
@@ -53,7 +53,7 @@ public class TransactionServiceBenchmark {
     @OutputTimeUnit(TimeUnit.MILLISECONDS)
     @Warmup(iterations = 5, time = 50, timeUnit = MILLISECONDS)
     @Measurement(iterations = 10, time = 50, timeUnit = MILLISECONDS)
-    public void processTransactionsBench(MyState state) {
+    public void processTransactionsBench(BenchState state) {
         state.transactionService.processTransactions(state.transactions);
     }
 }
