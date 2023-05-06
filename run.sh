@@ -1,2 +1,2 @@
 echo "Starting app..."
-java -jar build/libs/pionteching-solution-0.1-all.jar
+java -XX:+UseZGC -jar build/libs/pionteching-solution-0.1-all.jar

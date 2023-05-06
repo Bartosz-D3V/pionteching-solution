@@ -30,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private static Integer findMaxRegion(Collection<Task> tasks) {
-        return tasks.stream().map(Task::region).reduce(Integer.MIN_VALUE, Integer::max);
+        return tasks.stream().map(Task::region).reduce(-1, Integer::max);
     }
 
     private static ArrayList<Order> getCombinedOrders(Region[] regions) {
