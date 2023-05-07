@@ -6,39 +6,35 @@ import java.util.LinkedHashSet;
 
 public class Region {
     private final int regionNumber;
-    private final Collection<Integer> failureRestartQueue = new ArrayList<>();
-    private final Collection<Integer> priorityQueue = new ArrayList<>();
-    private final Collection<Integer> signalLowQueue = new ArrayList<>();
-    private final Collection<Integer> standardQueue = new ArrayList<>();
+    private final Collection<Order> failureRestartQueue = new ArrayList<>();
+    private final Collection<Order> priorityQueue = new ArrayList<>();
+    private final Collection<Order> signalLowQueue = new ArrayList<>();
+    private final Collection<Order> standardQueue = new ArrayList<>();
 
     public Region(int regionNumber) {
         this.regionNumber = regionNumber;
     }
 
     public void add(Task task) {
+        var order = new Order(regionNumber, task.atmId());
+
         switch (task.requestType()) {
-            case FAILURE_RESTART -> failureRestartQueue.add(task.atmId());
-            case PRIORITY -> priorityQueue.add(task.atmId());
-            case SIGNAL_LOW -> signalLowQueue.add(task.atmId());
-            case STANDARD -> standardQueue.add(task.atmId());
+            case FAILURE_RESTART -> failureRestartQueue.add(order);
+            case PRIORITY -> priorityQueue.add(order);
+            case SIGNAL_LOW -> signalLowQueue.add(order);
+            case STANDARD -> standardQueue.add(order);
         }
     }
 
     public Collection<Order> getOrderedAtms() {
-        var orders = new LinkedHashSet<Order>();
+        var numOfOrders =
+                failureRestartQueue.size() + priorityQueue.size() + signalLowQueue.size() + standardQueue.size();
+        var orders = new LinkedHashSet<Order>(numOfOrders);
 
-        for (Integer i : failureRestartQueue) {
-            orders.add(new Order(regionNumber, i));
-        }
-        for (Integer i : priorityQueue) {
-            orders.add(new Order(regionNumber, i));
-        }
-        for (Integer i : signalLowQueue) {
-            orders.add(new Order(regionNumber, i));
-        }
-        for (Integer i : standardQueue) {
-            orders.add(new Order(regionNumber, i));
-        }
+        orders.addAll(failureRestartQueue);
+        orders.addAll(priorityQueue);
+        orders.addAll(signalLowQueue);
+        orders.addAll(standardQueue);
 
         return orders;
     }
