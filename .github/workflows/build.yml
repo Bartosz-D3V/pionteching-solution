@@ -24,5 +24,7 @@ jobs:
         run: ./gradlew assemble
       - name: Test
         run: ./gradlew test --rerun-tasks
+      - name: Sonarlint
+        run: ./gradlew sonarlintMain sonarlintTest
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

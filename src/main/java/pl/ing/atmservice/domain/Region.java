@@ -28,8 +28,8 @@ public class Region {
 
     public Collection<Order> getOrderedAtms() {
         var numOfOrders =
-                failureRestartQueue.size() + priorityQueue.size() + signalLowQueue.size() + standardQueue.size();
-        var orders = new LinkedHashSet<Order>(numOfOrders);
+                failureRestartQueue.size() + priorityQueue.size() + signalLowQueue.size() + standardQueue.size() + 1;
+        var orders = new LinkedHashSet<Order>(numOfOrders, 1);
 
         orders.addAll(failureRestartQueue);
         orders.addAll(priorityQueue);
