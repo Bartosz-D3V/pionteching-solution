@@ -1,26 +1,29 @@
 package pl.ing.transactions.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
 
 public class Account implements Comparable<Account> {
-    private String account;
+    @JsonProperty("account")
+    private String number;
+
     private int debitCount;
     private int creditCount;
     private BigDecimal balance;
 
     public Account() {}
 
-    public Account(String account, int debitCount, int creditCount, BigDecimal balance) {
-        this.account = account;
+    public Account(String number, int debitCount, int creditCount, BigDecimal balance) {
+        this.number = number;
         this.debitCount = debitCount;
         this.creditCount = creditCount;
         this.balance = balance.setScale(2, RoundingMode.HALF_UP);
     }
 
-    public String getAccount() {
-        return account;
+    public String getNumber() {
+        return number;
     }
 
     public int getDebitCount() {
@@ -65,7 +68,7 @@ public class Account implements Comparable<Account> {
 
     @Override
     public int compareTo(Account account) {
-        return this.account.compareTo(account.getAccount());
+        return this.number.compareTo(account.getNumber());
     }
 
     @Override
@@ -75,12 +78,12 @@ public class Account implements Comparable<Account> {
         Account account1 = (Account) o;
         return debitCount == account1.debitCount
                 && creditCount == account1.creditCount
-                && Objects.equals(account, account1.account)
+                && Objects.equals(number, account1.number)
                 && Objects.equals(balance, account1.balance);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(account, debitCount, creditCount, balance);
+        return Objects.hash(number, debitCount, creditCount, balance);
     }
 }

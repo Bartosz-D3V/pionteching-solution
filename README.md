@@ -1,6 +1,7 @@
 [![CI](https://github.com/Bartosz-D3V/pionteching-solution/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/Bartosz-D3V/pionteching-solution/actions/workflows/build.yml)
 [![SAST_Semgrep](https://github.com/Bartosz-D3V/pionteching-solution/actions/workflows/semgrep.yml/badge.svg)](https://github.com/Bartosz-D3V/pionteching-solution/actions/workflows/semgrep.yml)
 [![SAST_CodeQL](https://github.com/Bartosz-D3V/pionteching-solution/actions/workflows/codeql.yml/badge.svg)](https://github.com/Bartosz-D3V/pionteching-solution/actions/workflows/codeql.yml)
+[![Code Coverage](https://codecov.io/gh/Bartosz-D3V/pionteching-solution/branch/master/graph/badge.svg?token=O6ABGKNV1Z)](https://codecov.io/gh/Bartosz-D3V/pionteching-solution)
 
 # ING Zielony Kod Contest
 This is a Java-based project for participating in programming contest organised by ING - Zielona Tesla za Zielony Kod.
@@ -54,21 +55,21 @@ chmod +x ./run.sh
 
 ## Tasks
 ### Task 1: ATM Service
-#### Average Time Complexity
+#### Time Complexity
 O(n) where n is number of orders.
 
 #### Space Complexity
 O(n) where n is number of orders.
 
 ### Task 2: Online game
-#### Average Time Complexity
+#### Time Complexity
 O(n) where n is number of clans.
 
 #### Space Complexity
 O(m) where m is number of maximum players per group.
 
 ### Task 3: Transactions
-#### Average Time Complexity
+#### Time Complexity
 O(n) where n is number of transactions.
 
 #### Space Complexity
