@@ -5,3 +5,4 @@ micronaut:
       location: classpath:banner.txt
   server:
     max-request-size: 524288000 # 500MB
+    host: 0.0.0.0
